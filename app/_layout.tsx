@@ -4,9 +4,9 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { AuthProvider, useAuth } from '../src/contexts/AuthContext';
 import { useRouter, useSegments } from 'expo-router';
 import { useEffect } from 'react';
-import { AuthProvider, useAuth } from '../src/contexts/AuthContext';
 
 function RootLayoutNav() {
   const { user, isLoading } = useAuth();

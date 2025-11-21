@@ -1,9 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import * as yup from 'yup';
+import { Colors } from '../../constants/theme';
 import { useAuth } from '../../src/contexts/AuthContext';
 
 const schema = yup.object().shape({
@@ -33,38 +35,50 @@ export default function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={['#FFFFFF', '#A1CEDC']} // White to light blue
+      style={styles.container}
+      start={{ x: 0, y: 0 }} // Top
+      end={{ x: 0, y: 1 }} // Bottom
+    >
       <Text style={styles.title}>Login</Text>
-      <Controller
-        control={control}
-        name="email"
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={value}
-            onChangeText={onChange}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-        )}
-      />
-      {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
+      
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Email:</Text>
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Enter your email"
+              value={value}
+              onChangeText={onChange}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+          )}
+        />
+        {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
+      </View>
 
-      <Controller
-        control={control}
-        name="password"
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            value={value}
-            onChangeText={onChange}
-            secureTextEntry
-          />
-        )}
-      />
-      {errors.password && <Text style={styles.error}>{errors.password.message}</Text>}
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Password:</Text>
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Enter your password"
+              value={value}
+              onChangeText={onChange}
+              secureTextEntry
+            />
+          )}
+        />
+        {errors.password && <Text style={styles.error}>{errors.password.message}</Text>}
+      </View>
 
       <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
         <Text style={styles.buttonText}>Login</Text>
@@ -73,7 +87,7 @@ export default function LoginScreen() {
       <TouchableOpacity onPress={() => router.push('/auth/register')}>
         <Text style={styles.link}>Don&apos;t have an account? Register</Text>
       </TouchableOpacity>
-    </View>
+    </LinearGradient>
   );
 }
 
@@ -82,38 +96,64 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#fff',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
+    marginBottom: 30,
+    color: Colors.light.text,
+  },
+  inputContainer: {
     marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.light.text,
+    marginBottom: 8,
   },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 5,
+    padding: 15,
+    borderRadius: 8,
+    fontSize: 16,
+    color: Colors.light.text,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   error: {
-    color: 'red',
-    marginBottom: 10,
+    color: Colors.light.secondary,
+    marginTop: 5,
+    fontSize: 14,
   },
   button: {
-    backgroundColor: '#007bff',
-    padding: 15,
-    borderRadius: 5,
+    backgroundColor: Colors.light.tint,
+    padding: 18,
+    borderRadius: 10,
     alignItems: 'center',
-    marginBottom: 10,
+    marginTop: 20,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 5,
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 16,
+    color: Colors.light.background,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   link: {
-    color: '#007bff',
+    color: Colors.light.tint,
     textAlign: 'center',
+    fontSize: 16,
+    textDecorationLine: 'underline',
   },
 });

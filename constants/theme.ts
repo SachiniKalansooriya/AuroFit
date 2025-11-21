@@ -5,25 +5,32 @@
 
 import { Platform } from 'react-native';
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const primaryColor = '#007AFF'; // Digital Blue - Trust, Clarity, Technology, Focus
+const secondaryColor = '#FF3B30'; // Vibrant Coral - Urgency, Energy, Action, Motivation
+const backgroundColor = '#FFFFFF'; // Pure White - Cleanliness, Simplicity, Max Contrast
+const accentColor = '#34C759'; // Success Green - Progress, Completion, Achievement
+const textDarkColor = '#1C1C1E'; // Near-Black - Sharpness, High Contrast
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
+    text: textDarkColor,
+    background: backgroundColor,
+    tint: primaryColor,
     icon: '#687076',
     tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    tabIconSelected: primaryColor,
+    secondary: secondaryColor,
+    accent: accentColor,
   },
   dark: {
     text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
+    background: '#0F0F0F', // Dark background for contrast
+    tint: primaryColor,
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    tabIconSelected: primaryColor,
+    secondary: secondaryColor,
+    accent: accentColor,
   },
 };
 
