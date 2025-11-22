@@ -142,7 +142,7 @@ export default function HomeScreen() {
         {/* Header */}
         <View style={styles.header}>
           <ThemedText type="title" style={styles.greeting}>
-            Hello, {user?.name}! 👋
+            Hello, {user?.name}!
           </ThemedText>
           <ThemedText style={styles.subGreeting}>Ready for your workout?</ThemedText>
         </View>

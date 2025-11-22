@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
@@ -24,13 +24,14 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: true,
+          headerTitleAlign: 'left',
         tabBarButton: HapticTab,
         headerRight: () => (
           <TouchableOpacity onPress={handleLogout} style={{ marginRight: 15 }}>
-            <Text style={{ color: Colors[colorScheme ?? 'light'].tint }}>Logout</Text>
+            <IconSymbol name="power" size={22} color={'#FF3B30'} />
           </TouchableOpacity>
         ),
-        headerTitle: user ? `Welcome, ${user.name}` : 'AuroFit',
+        headerTitle: () => <Text style={styles.headerTitle}>AuroFit</Text>,
       }}>
       <Tabs.Screen
         name="index"
@@ -49,3 +50,12 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#007AFF',
+    fontStyle: 'italic',
+  },
+});

@@ -70,15 +70,16 @@ export const WellnessCard: React.FC<WellnessCardProps> = ({ item, onPress, diffi
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderRadius: 12,
-    marginVertical: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: 18,
+    marginVertical: 10,
     marginHorizontal: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    overflow: 'hidden',
   },
   cardContent: {
     padding: 16,
@@ -90,8 +91,8 @@ const styles = StyleSheet.create({
   imagePlaceholder: {
     width: '100%',
     height: 150,
-    borderRadius: 8,
-    backgroundColor: 'rgba(0, 0, 0, 0.06)',
+    borderRadius: 14,
+    backgroundColor: 'rgba(0, 0, 0, 0.04)',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
   cardImage: {
     width: '100%',
     height: '100%',
-    borderRadius: 8,
+    borderRadius: 14,
   },
   textRow: {
     flex: 1,
