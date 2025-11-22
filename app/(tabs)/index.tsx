@@ -6,6 +6,7 @@ import { ThemedText } from '@/components/themed-text';
 import { WellnessCard } from '@/components/wellness-card';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../src/contexts/AuthContext';
+import FavoritesService from '../../src/services/favoritesService';
 import { WellnessService } from '../../src/services/wellnessService';
 import { ExerciseItem } from '../../src/types/wellness';
 
@@ -29,6 +30,7 @@ export default function HomeScreen() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [activeSection, setActiveSection] = useState<string>('all');
   const router = useRouter();
+  const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
 
   const tabs = [
     { key: 'all', label: 'All' },
@@ -45,6 +47,16 @@ export default function HomeScreen() {
     const imageInterval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 5000);
+
+    // load favorites
+    (async () => {
+      try {
+        const favs = await FavoritesService.getAll();
+        setFavoriteIds(new Set(favs.map(f => f.id)));
+      } catch (err) {
+        console.error('Failed loading favorites', err);
+      }
+    })();
 
     return () => clearInterval(imageInterval);
   }, []);
@@ -96,6 +108,8 @@ export default function HomeScreen() {
     };
     const mappedImage = getExerciseImage(item.name);
 
+    const isFav = favoriteIds.has(item.id);
+
     return (
       <WellnessCard
         item={{
@@ -107,11 +121,21 @@ export default function HomeScreen() {
           category: 'exercise',
           image: mappedImage
         }}
-        onPress={() => {
-          // navigate to detail screen (dynamic route uses exercise name)
-          router.push({ pathname: '/exercise/[name]', params: { name: item.name } });
-        }}
+        onPress={() => router.push({ pathname: '/exercise/[name]', params: { name: item.name } })}
         difficultyColor={getDifficultyColor(item.difficulty)}
+        isFavorite={isFav}
+        onToggleFavorite={async () => {
+          try {
+            const newState = await FavoritesService.toggle(item);
+            setFavoriteIds(prev => {
+              const copy = new Set(prev);
+              if (newState) copy.add(item.id); else copy.delete(item.id);
+              return copy;
+            });
+          } catch (err) {
+            console.error('Failed to toggle favorite', err);
+          }
+        }}
       />
     );
   };

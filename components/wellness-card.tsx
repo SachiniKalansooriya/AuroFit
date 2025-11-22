@@ -1,17 +1,20 @@
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import { Colors } from '../constants/theme';
 import { WellnessItem } from '../src/types/wellness';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
+import { IconSymbol } from './ui/icon-symbol';
 
 interface WellnessCardProps {
   item: WellnessItem;
   onPress?: () => void;
   difficultyColor?: string;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
 }
 
-export const WellnessCard: React.FC<WellnessCardProps> = ({ item, onPress, difficultyColor }) => {
+export const WellnessCard: React.FC<WellnessCardProps> = ({ item, onPress, difficultyColor, isFavorite, onToggleFavorite }) => {
   const getStatusColor = (status: string) => {
     if (difficultyColor) return difficultyColor;
     switch (status) {
@@ -31,6 +34,15 @@ export const WellnessCard: React.FC<WellnessCardProps> = ({ item, onPress, diffi
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
       <ThemedView style={styles.cardContent}>
+        <Pressable
+          onPress={(e: any) => {
+            e.stopPropagation?.();
+            onToggleFavorite?.();
+          }}
+          style={styles.favoriteWrapper}
+        >
+          <IconSymbol name="heart.fill" size={20} color={isFavorite ? '#FF3B30' : '#BBB'} />
+        </Pressable>
         {/* First Row: Image */}
         <ThemedView style={styles.imageRow}>
           <ThemedView style={styles.imagePlaceholder}>
@@ -145,5 +157,14 @@ const styles = StyleSheet.create({
     color: Colors.light.tint,
     fontWeight: '500',
     textTransform: 'capitalize',
+  },
+  favoriteWrapper: {
+    position: 'absolute',
+    top: 10,
+    right: 12,
+    zIndex: 10,
+    padding: 6,
+    borderRadius: 16,
+    backgroundColor: 'transparent',
   },
 });
