@@ -1,71 +1,76 @@
-import { WellnessItem } from '../types/wellness';
+import { ExerciseItem } from '../types/wellness';
 
-// Mock API service for wellness items
+// API service for exercises using api-ninjas.com
 export class WellnessService {
-  private static readonly MOCK_DATA: WellnessItem[] = [
-    {
-      id: '1',
-      title: 'Morning Yoga Flow',
-      description: 'Start your day with 20 minutes of gentle yoga to improve flexibility and reduce stress.',
-      status: 'Popular',
-      icon: '🧘',
-      category: 'exercise'
-    },
-    {
-      id: '2',
-      title: 'Stay Hydrated',
-      description: 'Drink at least 8 glasses of water today. Your body will thank you!',
-      status: 'Active',
-      icon: '💧',
-      category: 'wellness'
-    },
-    {
-      id: '3',
-      title: 'Healthy Breakfast Ideas',
-      description: 'Try oatmeal with berries and nuts for a nutritious start to your day.',
-      status: 'Recommended',
-      icon: '🥣',
-      category: 'nutrition'
-    },
-    {
-      id: '4',
-      title: 'Evening Meditation',
-      description: '10-minute guided meditation to help you unwind and prepare for restful sleep.',
-      status: 'New',
-      icon: '🌙',
-      category: 'sleep'
-    },
-    {
-      id: '5',
-      title: 'Quick HIIT Workout',
-      description: '30-minute high-intensity interval training to boost your metabolism.',
-      status: 'Popular',
-      icon: '💪',
-      category: 'exercise'
-    },
-    {
-      id: '6',
-      title: 'Mindful Breathing',
-      description: 'Practice deep breathing exercises to reduce anxiety and improve focus.',
-      status: 'Active',
-      icon: '🫁',
-      category: 'wellness'
-    }
-  ];
+  private static readonly API_URL = 'https://api.api-ninjas.com/v1/exercises';
+  private static readonly API_KEY = process.env.EXPO_PUBLIC_API_NINJAS_KEY || ''; // Set your API key in .env
 
-  static async getWellnessItems(): Promise<WellnessItem[]> {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // In a real app, you would fetch from an API like:
-    // const response = await fetch('https://api.example.com/wellness-tips');
-    // return response.json();
-
-    return this.MOCK_DATA;
+  static async getPopularExercises(): Promise<ExerciseItem[]> {
+    return this.fetchExercises({ limit: 5 });
   }
 
-  static async getWellnessItemById(id: string): Promise<WellnessItem | null> {
+  static async getExercisesByMuscle(muscle: string): Promise<ExerciseItem[]> {
+    return this.fetchExercises({ muscle, limit: 5 });
+  }
+
+  static async getExercisesByType(type: string): Promise<ExerciseItem[]> {
+    return this.fetchExercises({ type, limit: 5 });
+  }
+
+  static async getExercisesByDifficulty(difficulty: string): Promise<ExerciseItem[]> {
+    return this.fetchExercises({ difficulty, limit: 5 });
+  }
+
+  private static async fetchExercises(params: any = {}): Promise<ExerciseItem[]> {
+    if (!this.API_KEY) {
+      throw new Error('API key not configured. Please set EXPO_PUBLIC_API_NINJAS_KEY in your .env file.');
+    }
+
+    const queryParams = new URLSearchParams();
+    Object.keys(params).forEach(key => {
+      if (params[key]) queryParams.append(key, params[key]);
+    });
+
+    const url = `${this.API_URL}?${queryParams.toString()}`;
+
+    const response = await fetch(url, {
+      headers: {
+        'X-Api-Key': this.API_KEY
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`API request failed: ${response.status}`);
+    }
+
+    const exercises: any[] = await response.json();
+
+    return exercises.map((exercise, index) => ({
+      id: `${params.muscle || params.type || 'general'}-${index}`,
+      name: exercise.name,
+      type: exercise.type,
+      muscle: exercise.muscle,
+      equipment: exercise.equipment,
+      difficulty: exercise.difficulty,
+      instructions: exercise.instructions
+    }));
+  }
+
+  static async getWellnessItems(): Promise<ExerciseItem[]> {
+    return this.fetchExercises({ limit: 10 });
+  }
+
+  static async getWellnessItemById(id: string): Promise<ExerciseItem | null> {
+    // For simplicity, fetch all and find, but in production, fetch by id if API supports
     const items = await this.getWellnessItems();
     return items.find(item => item.id === id) || null;
+  }
+
+  static async getExerciseDetails(name: string): Promise<ExerciseItem | null> {
+    if (!name) return null;
+    // The API supports querying by name; request a single match
+    const queryParams: any = { name, limit: 1 };
+    const results = await this.fetchExercises(queryParams);
+    return results && results.length ? results[0] : null;
   }
 }

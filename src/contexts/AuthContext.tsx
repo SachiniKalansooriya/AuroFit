@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { AuthState, User } from '../types/auth';
 
 interface AuthContextType extends AuthState {
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (username: string, password: string) => Promise<boolean>;
   register: (username: string, email: string, password: string, name: string) => Promise<boolean>;
   logout: () => Promise<void>;
 }
@@ -34,33 +34,73 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const login = async (email: string, password: string): Promise<boolean> => {
-    // Mock login - in real app, call API
-    if (email === 'test@example.com' && password === 'password') {
-      const mockUser: User = {
-        id: '1',
-        username: 'testuser',
-        email,
-        name: 'Test User',
-      };
-      setUser(mockUser);
-      await SecureStore.setItemAsync(USER_KEY, JSON.stringify(mockUser));
-      return true;
+  const login = async (username: string, password: string): Promise<boolean> => {
+    try {
+      // Use dummy authentication API (dummyjson.com)
+      const response = await fetch('https://dummyjson.com/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        const user: User = {
+          id: userData.id.toString(),
+          username: userData.username,
+          email: userData.email || username,
+          name: `${userData.firstName} ${userData.lastName}`,
+        };
+        setUser(user);
+        await SecureStore.setItemAsync(USER_KEY, JSON.stringify(user));
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Login error:', error);
+      return false;
     }
-    return false;
   };
 
   const register = async (username: string, email: string, password: string, name: string): Promise<boolean> => {
-    // Mock register - in real app, call API
-    const mockUser: User = {
-      id: Date.now().toString(),
-      username,
-      email,
-      name,
-    };
-    setUser(mockUser);
-    await SecureStore.setItemAsync(USER_KEY, JSON.stringify(mockUser));
-    return true;
+    try {
+      // Use dummy user creation API
+      const response = await fetch('https://dummyjson.com/users/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+          firstName: name.split(' ')[0],
+          lastName: name.split(' ').slice(1).join(' ') || '',
+        }),
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        const user: User = {
+          id: userData.id.toString(),
+          username: userData.username,
+          email: userData.email,
+          name: `${userData.firstName} ${userData.lastName}`,
+        };
+        setUser(user);
+        await SecureStore.setItemAsync(USER_KEY, JSON.stringify(user));
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Registration error:', error);
+      return false;
+    }
   };
 
   const logout = async () => {

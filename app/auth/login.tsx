@@ -9,12 +9,12 @@ import { Colors } from '../../constants/theme';
 import { useAuth } from '../../src/contexts/AuthContext';
 
 const schema = yup.object().shape({
-  email: yup.string().email('Invalid email').required('Email is required'),
+  username: yup.string().required('Username is required'),
   password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
 });
 
 type LoginFormData = {
-  email: string;
+  username: string;
   password: string;
 };
 
@@ -26,11 +26,11 @@ export default function LoginScreen() {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    const success = await login(data.email, data.password);
+    const success = await login(data.username, data.password);
     if (success) {
       router.replace('/(tabs)');
     } else {
-      Alert.alert('Login Failed', 'Invalid email or password');
+      Alert.alert('Login Failed', 'Invalid username or password');
     }
   };
 
@@ -44,22 +44,22 @@ export default function LoginScreen() {
       <Text style={styles.title}>Login</Text>
       
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Email:</Text>
+        <Text style={styles.label}>Username:</Text>
         <Controller
           control={control}
-          name="email"
+          name="username"
           render={({ field: { onChange, value } }) => (
             <TextInput
               style={styles.input}
-              placeholder="Enter your email"
+              placeholder="Enter your username"
               value={value}
               onChangeText={onChange}
-              keyboardType="email-address"
+              keyboardType="default"
               autoCapitalize="none"
             />
           )}
         />
-        {errors.email && <Text style={styles.error}>{errors.email.message}</Text>}
+        {errors.username && <Text style={styles.error}>{errors.username.message}</Text>}
       </View>
 
       <View style={styles.inputContainer}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Colors } from '../constants/theme';
 import { WellnessItem } from '../src/types/wellness';
 import { ThemedText } from './themed-text';
@@ -8,10 +8,12 @@ import { ThemedView } from './themed-view';
 interface WellnessCardProps {
   item: WellnessItem;
   onPress?: () => void;
+  difficultyColor?: string;
 }
 
-export const WellnessCard: React.FC<WellnessCardProps> = ({ item, onPress }) => {
+export const WellnessCard: React.FC<WellnessCardProps> = ({ item, onPress, difficultyColor }) => {
   const getStatusColor = (status: string) => {
+    if (difficultyColor) return difficultyColor;
     switch (status) {
       case 'Popular':
         return Colors.light.tint;
@@ -29,20 +31,37 @@ export const WellnessCard: React.FC<WellnessCardProps> = ({ item, onPress }) => 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
       <ThemedView style={styles.cardContent}>
-        <ThemedView style={styles.header}>
-          <ThemedText style={styles.icon}>{item.icon}</ThemedText>
-          <ThemedView style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
-            <ThemedText style={styles.statusText}>{item.status}</ThemedText>
+        {/* First Row: Image */}
+        <ThemedView style={styles.imageRow}>
+          <ThemedView style={styles.imagePlaceholder}>
+            {item.image ? (
+              <Image source={item.image} style={styles.cardImage} resizeMode="cover" />
+            ) : (
+              <ThemedText style={styles.icon}>{item.icon}</ThemedText>
+            )}
           </ThemedView>
         </ThemedView>
 
-        <ThemedText style={styles.title}>{item.title}</ThemedText>
-        <ThemedText style={styles.description}>{item.description}</ThemedText>
-
-        <ThemedView style={styles.footer}>
-          <ThemedText style={styles.category}>
-            {item.category.charAt(0).toUpperCase() + item.category.slice(1)}
+        {/* Second Row: Title, Description, Status & Category */}
+        <ThemedView style={styles.textRow}>
+          <ThemedView style={styles.headerRow}>
+            <ThemedText style={styles.title} numberOfLines={1}>
+              {item.title}
+            </ThemedText>
+            <ThemedView style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
+              <ThemedText style={styles.statusText}>{item.status}</ThemedText>
+            </ThemedView>
+          </ThemedView>
+          
+          <ThemedText style={styles.description} numberOfLines={2}>
+            {item.description}
           </ThemedText>
+          
+          <ThemedView style={styles.footer}>
+            <ThemedText style={styles.category}>
+              {item.category.charAt(0).toUpperCase() + item.category.slice(1)}
+            </ThemedText>
+          </ThemedView>
         </ThemedView>
       </ThemedView>
     </TouchableOpacity>
@@ -64,14 +83,41 @@ const styles = StyleSheet.create({
   cardContent: {
     padding: 16,
   },
-  header: {
+  imageRow: {
+    width: '100%',
+    marginBottom: 12,
+  },
+  imagePlaceholder: {
+    width: '100%',
+    height: 150,
+    borderRadius: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.06)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  icon: {
+    fontSize: 48,
+  },
+  cardImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 8,
+  },
+  textRow: {
+    flex: 1,
+  },
+  headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 8,
   },
-  icon: {
-    fontSize: 32,
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.light.text,
+    flex: 1,
+    marginRight: 8,
   },
   statusBadge: {
     paddingHorizontal: 8,
@@ -83,21 +129,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
   },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-    color: Colors.light.text,
-  },
   description: {
     fontSize: 14,
     lineHeight: 20,
     color: Colors.light.text,
     opacity: 0.8,
-    marginBottom: 12,
+    marginBottom: 8,
   },
   footer: {
-    alignItems: 'flex-end',
+    alignItems: 'flex-start',
   },
   category: {
     fontSize: 12,
