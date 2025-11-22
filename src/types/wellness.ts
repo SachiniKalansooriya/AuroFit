@@ -31,3 +31,25 @@ export interface WorkoutLog {
   duration?: number; // optional, in minutes
   notes?: string;
 }
+
+export interface WaterIntake {
+  id: string;
+  date: string; // ISO date string
+  amount: number; // in ml
+  glassSize: number; // in ml (e.g., 250, 500)
+  timestamp: string; // ISO timestamp
+}
+
+export interface WaterGoal {
+  dailyGoal: number; // in ml
+  glassSize: number; // in ml
+  reminderEnabled: boolean;
+  reminderInterval: number; // in minutes
+}
+
+export interface WaterHistory {
+  date: string; // ISO date string
+  totalIntake: number; // in ml
+  goal: number; // in ml
+  intakeCount: number; // number of glasses
+}

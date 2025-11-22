@@ -2,11 +2,14 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
+import { Provider } from 'react-redux';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { AuthProvider, useAuth } from '../src/contexts/AuthContext';
 import { useRouter, useSegments } from 'expo-router';
 import { useEffect } from 'react';
+import NotificationService from '../src/services/notificationService';
+import { store } from '../src/redux/store';
 
 function RootLayoutNav() {
   const { user, isLoading } = useAuth();
@@ -25,6 +28,13 @@ function RootLayoutNav() {
       // Redirect to login if not logged in and not in auth group
       router.replace('/auth/login');
     }
+
+    // Initialize notification service
+    const initNotifications = async () => {
+      const notificationService = NotificationService.getInstance();
+      await notificationService.initialize();
+    };
+    initNotifications();
   }, [user, segments, isLoading, router]);
 
   if (isLoading) {
@@ -45,11 +55,13 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <AuthProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <RootLayoutNav />
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </AuthProvider>
+    <Provider store={store}>
+      <AuthProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <RootLayoutNav />
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </AuthProvider>
+    </Provider>
   );
 }

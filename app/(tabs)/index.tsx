@@ -4,6 +4,9 @@ import { FlatList, Image, Pressable, ScrollView, StyleSheet, View } from 'react-
 
 import { LogWorkoutModal } from '@/components/log-workout-modal';
 import { ThemedText } from '@/components/themed-text';
+import { WaterSettingsModal } from '@/components/water-settings-modal';
+import { WaterTracker } from '@/components/water-tracker';
+import { WaterHistoryChart } from '@/components/water-history-chart';
 import { WellnessCard } from '@/components/wellness-card';
 import { useRouter } from 'expo-router';
 import { wellnessTips } from '../../src/constants/tips';
@@ -37,6 +40,8 @@ export default function HomeScreen() {
   const [selectedExercise, setSelectedExercise] = useState<WellnessItem | null>(null);
   const [selectedType, setSelectedType] = useState<string>('');
   const [dailyTip, setDailyTip] = useState<string>('');
+  const [waterSettingsVisible, setWaterSettingsVisible] = useState(false);
+  const [waterHistoryVisible, setWaterHistoryVisible] = useState(false);
 
   const tabs = [
     { key: 'all', label: 'All' },
@@ -201,6 +206,12 @@ export default function HomeScreen() {
           <ThemedText style={styles.dailyTipText}>{dailyTip}</ThemedText>
         </View>
         
+        {/* Water Tracker Section */}
+        <WaterTracker
+          onSettingsPress={() => setWaterSettingsVisible(true)}
+          onHistoryPress={() => setWaterHistoryVisible(true)}
+        />
+        
         {/* Hero Image Section */}
         <View style={styles.imageContainer}>
           <Image
@@ -280,6 +291,19 @@ export default function HomeScreen() {
           alert('Workout logged successfully!');
           router.push('/workouts');
         }}
+      />
+
+      <WaterSettingsModal
+        visible={waterSettingsVisible}
+        onClose={() => setWaterSettingsVisible(false)}
+        onSave={() => {
+          // Could refresh water tracker data if needed
+        }}
+      />
+
+      <WaterHistoryChart
+        visible={waterHistoryVisible}
+        onClose={() => setWaterHistoryVisible(false)}
       />
     </LinearGradient>
   );
