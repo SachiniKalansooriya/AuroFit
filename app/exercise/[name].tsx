@@ -4,11 +4,11 @@ import { Alert, Image, Linking, Pressable, ScrollView, StyleSheet, View } from '
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { IconSymbol } from '@/components/ui/icon-symbol';
 import getExerciseImage from '../../src/config/exercise-images';
+import FavoritesService from '../../src/services/favoritesService';
 import { WellnessService } from '../../src/services/wellnessService';
 import { ExerciseItem } from '../../src/types/wellness';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import FavoritesService from '../../src/services/favoritesService';
 
 export default function ExerciseDetailScreen() {
   const params = useLocalSearchParams() as { name?: string };

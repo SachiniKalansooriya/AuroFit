@@ -21,6 +21,7 @@ const MAPPING: Record<string, string> = {
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
   'power': 'power_settings_new',
+  'gear': 'settings',
 };
 
 /**
