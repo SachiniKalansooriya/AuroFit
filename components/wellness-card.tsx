@@ -41,7 +41,7 @@ export const WellnessCard: React.FC<WellnessCardProps> = ({ item, onPress, diffi
           }}
           style={styles.favoriteWrapper}
         >
-          <IconSymbol name="heart.fill" size={20} color={isFavorite ? '#FF3B30' : '#BBB'} />
+          <IconSymbol name={isFavorite ? "heart.fill" : "heart"} size={20} color={isFavorite ? '#007AFF' : '#BBB'} />
         </Pressable>
         {/* First Row: Image */}
         <ThemedView style={styles.imageRow}>
@@ -160,11 +160,14 @@ const styles = StyleSheet.create({
   },
   favoriteWrapper: {
     position: 'absolute',
-    top: 10,
-    right: 12,
+    top: 14,
+    right: 14,
     zIndex: 10,
-    padding: 6,
-    borderRadius: 16,
-    backgroundColor: 'transparent',
+    padding: 8,
+    borderRadius: 18,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
   },
 });

@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import FavoritesService from '../../src/services/favoritesService';
+import getExerciseImage from '../../src/config/exercise-images';
 import { ExerciseItem } from '../../src/types/wellness';
 
 export default function FavoritesScreen() {
@@ -47,7 +48,7 @@ export default function FavoritesScreen() {
                 status: item.difficulty,
                 icon: '🏋️',
                 category: 'exercise',
-                image: undefined,
+                image: getExerciseImage(item.name),
               }}
               isFavorite={true}
               onToggleFavorite={() => onToggle(item)}

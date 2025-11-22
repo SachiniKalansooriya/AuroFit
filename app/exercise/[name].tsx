@@ -7,6 +7,8 @@ import { ThemedView } from '@/components/themed-view';
 import getExerciseImage from '../../src/config/exercise-images';
 import { WellnessService } from '../../src/services/wellnessService';
 import { ExerciseItem } from '../../src/types/wellness';
+import { IconSymbol } from '@/components/ui/icon-symbol';
+import FavoritesService from '../../src/services/favoritesService';
 
 export default function ExerciseDetailScreen() {
   const params = useLocalSearchParams() as { name?: string };
@@ -16,6 +18,7 @@ export default function ExerciseDetailScreen() {
   const [exercise, setExercise] = useState<ExerciseItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isFav, setIsFav] = useState<boolean>(false);
 
   useEffect(() => {
     let mounted = true;
@@ -25,6 +28,14 @@ export default function ExerciseDetailScreen() {
         if (!name) throw new Error('No exercise specified');
         const details = await WellnessService.getExerciseDetails(decodeURIComponent(name));
         if (mounted) setExercise(details);
+        if (mounted && details) {
+          try {
+            const fav = await FavoritesService.isFavorite(details.id) || await FavoritesService.isFavorite(details.name);
+            setIsFav(!!fav);
+          } catch (err) {
+            console.error('Failed to check favorite', err);
+          }
+        }
       } catch (err: any) {
         console.error('Error loading exercise details:', err);
         if (mounted) setError(err.message || String(err));
@@ -39,9 +50,27 @@ export default function ExerciseDetailScreen() {
   return (
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        <ThemedText type="title" style={styles.title}>
-          {exercise?.name ?? (loading ? 'Loading...' : 'Exercise not found')}
-        </ThemedText>
+        <View style={styles.titleRow}>
+          <ThemedText type="title" style={styles.title}>
+            {exercise?.name ?? (loading ? 'Loading...' : 'Exercise not found')}
+          </ThemedText>
+          {exercise && (
+            <Pressable
+              style={styles.titleFav}
+              onPress={async () => {
+                try {
+                  const newState = await FavoritesService.toggle(exercise);
+                  setIsFav(!!newState);
+                } catch (err) {
+                  console.error('Toggle favorite failed', err);
+                  Alert.alert('Error', 'Could not update favorite');
+                }
+              }}
+            >
+              <IconSymbol name="heart.fill" size={26} color={isFav ? '#007AFF' : '#BBBBBB'} />
+            </Pressable>
+          )}
+        </View>
 
         {/* Header image (mapped local image or fallback) */}
         {exercise && (
@@ -162,6 +191,22 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 12,
   },
+  headerWrapper: {
+    position: 'relative',
+    width: '100%',
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: 12,
+  },
+  detailFav: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    zIndex: 20,
+    backgroundColor: 'rgba(255,255,255,0.85)',
+    borderRadius: 20,
+    padding: 6,
+  },
   actionRow: {
     flexDirection: 'row',
     gap: 10,
@@ -186,6 +231,17 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: '#222',
     marginBottom: 8,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  titleFav: {
+    padding: 6,
+    borderRadius: 20,
+    backgroundColor: 'transparent',
   },
   back: {
     marginTop: 24,
