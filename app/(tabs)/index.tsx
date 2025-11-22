@@ -6,6 +6,7 @@ import { LogWorkoutModal } from '@/components/log-workout-modal';
 import { ThemedText } from '@/components/themed-text';
 import { WellnessCard } from '@/components/wellness-card';
 import { useRouter } from 'expo-router';
+import { wellnessTips } from '../../src/constants/tips';
 import { useAuth } from '../../src/contexts/AuthContext';
 import FavoritesService from '../../src/services/favoritesService';
 import { WellnessService } from '../../src/services/wellnessService';
@@ -35,6 +36,7 @@ export default function HomeScreen() {
   const [logModalVisible, setLogModalVisible] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState<WellnessItem | null>(null);
   const [selectedType, setSelectedType] = useState<string>('');
+  const [dailyTip, setDailyTip] = useState<string>('');
 
   const tabs = [
     { key: 'all', label: 'All' },
@@ -61,6 +63,11 @@ export default function HomeScreen() {
         console.error('Failed loading favorites', err);
       }
     })();
+
+    // Set daily tip based on current date
+    const today = new Date().toDateString();
+    const tipIndex = today.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % wellnessTips.length;
+    setDailyTip(wellnessTips[tipIndex]);
 
     return () => clearInterval(imageInterval);
   }, []);
@@ -186,6 +193,12 @@ export default function HomeScreen() {
             Hello, {user?.name}!
           </ThemedText>
           <ThemedText style={styles.subGreeting}>Ready for your workout?</ThemedText>
+        </View>
+        
+        {/* Daily Tip Section */}
+        <View style={styles.dailyTipContainer}>
+          <ThemedText type="subtitle" style={styles.dailyTipTitle}>💡 Daily Wellness Tip</ThemedText>
+          <ThemedText style={styles.dailyTipText}>{dailyTip}</ThemedText>
         </View>
         
         {/* Hero Image Section */}
@@ -406,5 +419,28 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     color: '#666',
+  },
+  dailyTipContainer: {
+    marginHorizontal: 20,
+    marginBottom: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 16,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  dailyTipTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#007AFF',
+    marginBottom: 8,
+  },
+  dailyTipText: {
+    fontSize: 16,
+    lineHeight: 22,
+    color: '#333',
   },
 });
