@@ -2,6 +2,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { WorkoutService } from '../../src/services/workoutService';
 import { WorkoutLog } from '../../src/types/wellness';
 
@@ -67,10 +68,15 @@ export default function WorkoutsScreen() {
   }
 
   return (
-    <ThemedView style={styles.container}>
+    <LinearGradient
+      colors={['#FFFFFF', '#A1CEDC']}
+      style={styles.gradient}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+    >
       <ThemedText type="title" style={styles.title}>My Workouts</ThemedText>
       {workouts.length > 0 && (
-        <ThemedView style={styles.summary}>
+        <View style={styles.summary}>
           <ThemedText style={styles.summaryTitle}>Weekly Exercise Duration Summary:</ThemedText>
           {Object.entries(exerciseSummary).map(([name, totalMin]) => {
             const hours = Math.floor(totalMin / 60);
@@ -82,7 +88,7 @@ export default function WorkoutsScreen() {
               </ThemedText>
             );
           })}
-        </ThemedView>
+        </View>
       )}
       {workouts.length === 0 ? (
         <ThemedText style={styles.empty}>No workouts logged yet.</ThemedText>
@@ -95,11 +101,14 @@ export default function WorkoutsScreen() {
           contentContainerStyle={styles.list}
         />
       )}
-    </ThemedView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  gradient: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     padding: 16,

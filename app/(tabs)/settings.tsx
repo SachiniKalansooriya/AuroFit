@@ -2,6 +2,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import React, { useEffect, useState } from 'react';
 import { Appearance, Image, ScrollView, StyleSheet, Switch, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../src/contexts/AuthContext';
 
 export default function SettingsScreen() {
@@ -22,8 +23,13 @@ export default function SettingsScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.content}>
+    <LinearGradient
+      colors={['#FFFFFF', '#A1CEDC']}
+      style={styles.gradient}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+    >
+      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
         <ThemedText type="title" style={styles.title}>Settings</ThemedText>
 
         {/* Profile Section */}
@@ -59,11 +65,14 @@ export default function SettingsScreen() {
           More settings will be added here.
         </ThemedText>
       </ScrollView>
-    </ThemedView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  gradient: {
+    flex: 1,
+  },
   container: {
     flex: 1,
   },

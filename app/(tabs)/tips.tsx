@@ -2,6 +2,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import React from 'react';
 import { FlatList, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { wellnessTips } from '../../src/constants/tips';
 
 export default function TipsScreen() {
@@ -13,7 +14,12 @@ export default function TipsScreen() {
   );
 
   return (
-    <ThemedView style={styles.container}>
+    <LinearGradient
+      colors={['#FFFFFF', '#A1CEDC']}
+      style={styles.gradient}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+    >
       <ThemedText type="title" style={styles.title}>Wellness Tips</ThemedText>
       <FlatList
         data={wellnessTips}
@@ -22,11 +28,14 @@ export default function TipsScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.list}
       />
-    </ThemedView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  gradient: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     padding: 16,

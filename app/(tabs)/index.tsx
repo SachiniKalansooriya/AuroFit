@@ -15,14 +15,10 @@ import FavoritesService from '../../src/services/favoritesService';
 import { WellnessService } from '../../src/services/wellnessService';
 import { ExerciseItem, WellnessItem } from '../../src/types/wellness';
 
-// Import images
-const img1 = require('../../assets/images/img1.jpg');
-const img2 = require('../../assets/images/img2.jpg');
-const img3 = require('../../assets/images/img3.jpg');
-const img4 = require('../../assets/images/img4.jpg');
+
 
 import getExerciseImage from '../../src/config/exercise-images';
-const images = [img1, img2, img3, img4];
+
 
 export default function HomeScreen() {
   const { user } = useAuth();
@@ -41,7 +37,6 @@ export default function HomeScreen() {
   const [selectedType, setSelectedType] = useState<string>('');
   const [dailyTip, setDailyTip] = useState<string>('');
   const [waterSettingsVisible, setWaterSettingsVisible] = useState(false);
-  const [waterHistoryVisible, setWaterHistoryVisible] = useState(false);
 
   const tabs = [
     { key: 'all', label: 'All' },
@@ -51,31 +46,6 @@ export default function HomeScreen() {
     { key: 'bodyweight', label: 'Bodyweight' },
     { key: 'strength', label: 'Strength' }
   ];
-
-  useEffect(() => {
-    loadWellnessItems();
-
-    const imageInterval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 5000);
-
-    // load favorites
-    (async () => {
-      try {
-        const favs = await FavoritesService.getAll();
-        setFavoriteIds(new Set(favs.map(f => f.id)));
-      } catch (err) {
-        console.error('Failed loading favorites', err);
-      }
-    })();
-
-    // Set daily tip based on current date
-    const today = new Date().toDateString();
-    const tipIndex = today.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % wellnessTips.length;
-    setDailyTip(wellnessTips[tipIndex]);
-
-    return () => clearInterval(imageInterval);
-  }, []);
 
   const loadWellnessItems = async () => {
     try {
@@ -95,6 +65,25 @@ export default function HomeScreen() {
       console.error('Error loading exercises:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadWellnessItems();
+    // Set a random daily tip
+    const randomTip = wellnessTips[Math.floor(Math.random() * wellnessTips.length)];
+    setDailyTip(randomTip);
+    // Load favorites
+    loadFavorites();
+  }, []);
+
+  const loadFavorites = async () => {
+    try {
+      const favs = await FavoritesService.getAll();
+      const favIds = new Set(favs.map(fav => fav.id));
+      setFavoriteIds(favIds);
+    } catch (error) {
+      console.error('Error loading favorites:', error);
     }
   };
 
@@ -207,31 +196,9 @@ export default function HomeScreen() {
         </View>
         
         {/* Water Tracker Section */}
-        <WaterTracker
-          onSettingsPress={() => setWaterSettingsVisible(true)}
-          onHistoryPress={() => setWaterHistoryVisible(true)}
-        />
+        <WaterTracker onSettingsPress={() => setWaterSettingsVisible(true)} />
         
-        {/* Hero Image Section */}
-        <View style={styles.imageContainer}>
-          <Image
-            source={images[currentImageIndex]}
-            style={styles.rotatingImage}
-            resizeMode="cover"
-          />
-          <LinearGradient
-            colors={['rgba(0, 0, 0, 0.7)', 'rgba(0, 0, 0, 0.3)']}
-            style={styles.overlay}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-          >
-            <ThemedText style={styles.overlayTitle}>Welcome to AuroFit!</ThemedText>
-            <ThemedText style={styles.overlaySubtitle}>
-              Discover exercises, track your fitness, and stay healthy.
-            </ThemedText>
-          </LinearGradient>
-        </View>
-
+        
         {/* Horizontal Scrollable Tabs */}
         <ScrollView 
           horizontal 
@@ -299,11 +266,6 @@ export default function HomeScreen() {
         onSave={() => {
           // Could refresh water tracker data if needed
         }}
-      />
-
-      <WaterHistoryChart
-        visible={waterHistoryVisible}
-        onClose={() => setWaterHistoryVisible(false)}
       />
     </LinearGradient>
   );

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Dimensions, ScrollView, StyleSheet, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch, useSelector } from 'react-redux';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { RootState, AppDispatch } from '../../src/redux/store';
 import { loadWaterData } from '../../src/redux/slices/waterSlice';
 import { WaterHistory } from '../../src/types/wellness';
@@ -81,9 +81,16 @@ export default function WaterScreen() {
 
   if (loading) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedText>Loading water history...</ThemedText>
-      </ThemedView>
+      <LinearGradient
+        colors={['#FFFFFF', '#A1CEDC']}
+        style={styles.gradient}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+      >
+        <View style={styles.container}>
+          <ThemedText>Loading water history...</ThemedText>
+        </View>
+      </LinearGradient>
     );
   }
 
@@ -92,8 +99,13 @@ export default function WaterScreen() {
   const totalThisWeek = getTotalThisWeek();
 
   return (
-    <ThemedView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+    <LinearGradient
+      colors={['#FFFFFF', '#A1CEDC']}
+      style={styles.gradient}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+    >
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
           <ThemedText type="title" style={styles.title}>💧 Water History</ThemedText>
@@ -181,11 +193,14 @@ export default function WaterScreen() {
           </View>
         </View>
       </ScrollView>
-    </ThemedView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  gradient: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     padding: 16,

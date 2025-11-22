@@ -3,6 +3,7 @@ import { WellnessCard } from '@/components/wellness-card';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import getExerciseImage from '../../src/config/exercise-images';
 import FavoritesService from '../../src/services/favoritesService';
 import { ExerciseItem } from '../../src/types/wellness';
@@ -29,7 +30,12 @@ export default function FavoritesScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={['#FFFFFF', '#A1CEDC']}
+      style={styles.gradient}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+    >
       <ThemedText type="title">Favorites</ThemedText>
       {loading ? (
         <ThemedText style={styles.loading}>Loading favorites…</ThemedText>
@@ -57,11 +63,14 @@ export default function FavoritesScreen() {
           )}
         />
       )}
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  gradient: {
+    flex: 1,
+  },
   container: { flex: 1, padding: 16 },
   loading: { marginTop: 12 },
 });
