@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
-import { FlatList, Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { FlatList, Image, Pressable, ScrollView, StyleSheet, View, Platform } from 'react-native';
 
 import { LogWorkoutModal } from '@/components/log-workout-modal';
 import { ThemedText } from '@/components/themed-text';
@@ -14,11 +14,7 @@ import { useAuth } from '../../src/contexts/AuthContext';
 import FavoritesService from '../../src/services/favoritesService';
 import { WellnessService } from '../../src/services/wellnessService';
 import { ExerciseItem, WellnessItem } from '../../src/types/wellness';
-
-
-
 import getExerciseImage from '../../src/config/exercise-images';
-
 
 export default function HomeScreen() {
   const { user } = useAuth();
@@ -70,10 +66,8 @@ export default function HomeScreen() {
 
   useEffect(() => {
     loadWellnessItems();
-    // Set a random daily tip
     const randomTip = wellnessTips[Math.floor(Math.random() * wellnessTips.length)];
     setDailyTip(randomTip);
-    // Load favorites
     loadFavorites();
   }, []);
 
@@ -112,7 +106,6 @@ export default function HomeScreen() {
       return icons[muscle.toLowerCase()] || '🏋️';
     };
     const mappedImage = getExerciseImage(item.name);
-
     const isFav = favoriteIds.has(item.id);
 
     return (
@@ -181,25 +174,40 @@ export default function HomeScreen() {
       end={{ x: 0, y: 1 }}
     >
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        {/* Header */}
+        {/* Header with Glass Effect */}
         <View style={styles.header}>
-          <ThemedText type="title" style={styles.greeting}>
-            Hello, {user?.name}!
-          </ThemedText>
-          <ThemedText style={styles.subGreeting}>Ready for your workout?</ThemedText>
+          <View style={styles.glassCard}>
+            <ThemedText type="title" style={styles.greeting}>
+              Hello, {user?.name}! 👋
+            </ThemedText>
+            <ThemedText style={styles.subGreeting}>Ready for your workout?</ThemedText>
+          </View>
         </View>
         
-        {/* Daily Tip Section */}
+        {/* Daily Tip Section - Glassy */}
         <View style={styles.dailyTipContainer}>
-          <ThemedText type="subtitle" style={styles.dailyTipTitle}>💡 Daily Wellness Tip</ThemedText>
-          <ThemedText style={styles.dailyTipText}>{dailyTip}</ThemedText>
+          <LinearGradient
+            colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
+            style={styles.glassCard}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <View style={styles.tipHeader}>
+              <View style={styles.iconBadge}>
+                <ThemedText style={styles.iconText}>💡</ThemedText>
+              </View>
+              <ThemedText type="subtitle" style={styles.dailyTipTitle}>Daily Wellness Tip</ThemedText>
+            </View>
+            <ThemedText style={styles.dailyTipText}>{dailyTip}</ThemedText>
+          </LinearGradient>
         </View>
         
         {/* Water Tracker Section */}
-        <WaterTracker onSettingsPress={() => setWaterSettingsVisible(true)} />
+        <View style={styles.trackerContainer}>
+          <WaterTracker onSettingsPress={() => setWaterSettingsVisible(true)} />
+        </View>
         
-        
-        {/* Horizontal Scrollable Tabs */}
+        {/* Horizontal Scrollable Tabs - Glassy */}
         <ScrollView 
           horizontal 
           showsHorizontalScrollIndicator={false}
@@ -216,14 +224,25 @@ export default function HomeScreen() {
                 pressed && styles.tabButtonPressed
               ]}
             >
-              <ThemedText 
-                style={[
-                  styles.tabText, 
-                  activeSection === t.key && styles.tabTextActive
-                ]}
+              <LinearGradient
+                colors={
+                  activeSection === t.key
+                    ? ['#007AFF', '#0056CC']
+                    : ['rgba(255, 255, 255, 0.9)', 'rgba(255, 255, 255, 0.7)']
+                }
+                style={styles.tabGradient}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
               >
-                {t.label}
-              </ThemedText>
+                <ThemedText 
+                  style={[
+                    styles.tabText, 
+                    activeSection === t.key && styles.tabTextActive
+                  ]}
+                >
+                  {t.label}
+                </ThemedText>
+              </LinearGradient>
             </Pressable>
           ))}
         </ScrollView>
@@ -231,7 +250,9 @@ export default function HomeScreen() {
         {/* Content */}
         {loading ? (
           <View style={styles.loadingContainer}>
-            <ThemedText style={styles.loadingText}>Loading exercises...</ThemedText>
+            <View style={styles.glassCard}>
+              <ThemedText style={styles.loadingText}>Loading exercises...</ThemedText>
+            </View>
           </View>
         ) : (
           <View style={styles.contentContainer}>
@@ -263,9 +284,7 @@ export default function HomeScreen() {
       <WaterSettingsModal
         visible={waterSettingsVisible}
         onClose={() => setWaterSettingsVisible(false)}
-        onSave={() => {
-          // Could refresh water tracker data if needed
-        }}
+        onSave={() => {}}
       />
     </LinearGradient>
   );
@@ -283,6 +302,25 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 12,
   },
+  glassCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    borderRadius: 20,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 12,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
+    backdropFilter: 'blur(10px)', // Note: This doesn't work on React Native, but included for reference
+  },
   greeting: {
     fontSize: 28,
     fontWeight: 'bold',
@@ -291,52 +329,47 @@ const styles = StyleSheet.create({
   },
   subGreeting: {
     fontSize: 16,
-    color: '#666',
+    color: '#555',
+    fontWeight: '500',
   },
-  imageContainer: {
-    marginVertical: 16,
-    marginHorizontal: 16,
+  dailyTipContainer: {
+    marginHorizontal: 20,
+    marginBottom: 16,
+  },
+  tipHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  iconBadge: {
+    width: 40,
+    height: 40,
     borderRadius: 20,
-    overflow: 'hidden',
-    elevation: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-  },
-  rotatingImage: {
-    width: '100%',
-    height: 220,
-  },
-  overlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    backgroundColor: 'rgba(0, 122, 255, 0.15)',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 24,
+    marginRight: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 122, 255, 0.3)',
   },
-  overlayTitle: {
-    fontSize: 32,
+  iconText: {
+    fontSize: 20,
+  },
+  dailyTipTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
-    textAlign: 'center',
-    marginBottom: 8,
-    textShadowColor: 'rgba(0, 0, 0, 0.8)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
+    color: '#007AFF',
+    flex: 1,
   },
-  overlaySubtitle: {
-    fontSize: 16,
-    color: '#FFFFFF',
-    textAlign: 'center',
+  dailyTipText: {
+    fontSize: 15,
     lineHeight: 22,
-    opacity: 0.95,
-    textShadowColor: 'rgba(0, 0, 0, 0.6)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
+    color: '#333',
+    fontWeight: '500',
+  },
+  trackerContainer: {
+    marginHorizontal: 20,
+    marginBottom: 12,
   },
   tabBar: {
     maxHeight: 60,
@@ -348,27 +381,41 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tabButton: {
+    borderRadius: 24,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.6)',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
+  tabGradient: {
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 24,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    borderWidth: 1,
-    borderColor: 'rgba(0, 122, 255, 0.1)',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
   },
   tabButtonActive: {
-    backgroundColor: '#007AFF',
-    borderColor: '#007AFF',
-    elevation: 4,
-    shadowOpacity: 0.25,
+    borderColor: 'rgba(0, 122, 255, 0.4)',
+    ...Platform.select({
+      ios: {
+        shadowOpacity: 0.2,
+        shadowRadius: 6,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
   tabButtonPressed: {
-    opacity: 0.7,
-    transform: [{ scale: 0.96 }],
+    opacity: 0.8,
+    transform: [{ scale: 0.97 }],
   },
   tabText: {
     fontSize: 15,
@@ -386,11 +433,14 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   sectionTitle: {
-    marginBottom: 12,
+    marginBottom: 16,
     marginHorizontal: 20,
     fontSize: 22,
     fontWeight: 'bold',
     color: '#1a1a1a',
+    textShadowColor: 'rgba(255, 255, 255, 0.8)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   listContainer: {
     paddingBottom: 8,
@@ -400,33 +450,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 40,
+    paddingHorizontal: 20,
   },
   loadingText: {
     textAlign: 'center',
     fontSize: 16,
     color: '#666',
-  },
-  dailyTipContainer: {
-    marginHorizontal: 20,
-    marginBottom: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderRadius: 16,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  dailyTipTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#007AFF',
-    marginBottom: 8,
-  },
-  dailyTipText: {
-    fontSize: 16,
-    lineHeight: 22,
-    color: '#333',
+    fontWeight: '500',
   },
 });
