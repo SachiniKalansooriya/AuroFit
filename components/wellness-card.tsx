@@ -12,9 +12,10 @@ interface WellnessCardProps {
   difficultyColor?: string;
   isFavorite?: boolean;
   onToggleFavorite?: () => void;
+  onLogExercise?: () => void;
 }
 
-export const WellnessCard: React.FC<WellnessCardProps> = ({ item, onPress, difficultyColor, isFavorite, onToggleFavorite }) => {
+export const WellnessCard: React.FC<WellnessCardProps> = ({ item, onPress, difficultyColor, isFavorite, onToggleFavorite, onLogExercise }) => {
   const getStatusColor = (status: string) => {
     if (difficultyColor) return difficultyColor;
     switch (status) {
@@ -73,6 +74,11 @@ export const WellnessCard: React.FC<WellnessCardProps> = ({ item, onPress, diffi
             <ThemedText style={styles.category}>
               {item.category.charAt(0).toUpperCase() + item.category.slice(1)}
             </ThemedText>
+            {onLogExercise && (
+              <TouchableOpacity onPress={onLogExercise} style={styles.logButton}>
+                <IconSymbol name="plus" size={16} color={Colors.light.tint} />
+              </TouchableOpacity>
+            )}
           </ThemedView>
         </ThemedView>
       </ThemedView>
@@ -169,5 +175,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.08,
     shadowRadius: 2,
+  },
+  logButton: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    padding: 4,
   },
 });

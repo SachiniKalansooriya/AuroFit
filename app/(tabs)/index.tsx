@@ -2,13 +2,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
 import { FlatList, Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
+import { LogWorkoutModal } from '@/components/log-workout-modal';
 import { ThemedText } from '@/components/themed-text';
 import { WellnessCard } from '@/components/wellness-card';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../../src/contexts/AuthContext';
 import FavoritesService from '../../src/services/favoritesService';
 import { WellnessService } from '../../src/services/wellnessService';
-import { ExerciseItem } from '../../src/types/wellness';
+import { ExerciseItem, WellnessItem } from '../../src/types/wellness';
 
 // Import images
 const img1 = require('../../assets/images/img1.jpg');
@@ -31,6 +32,9 @@ export default function HomeScreen() {
   const [activeSection, setActiveSection] = useState<string>('all');
   const router = useRouter();
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
+  const [logModalVisible, setLogModalVisible] = useState(false);
+  const [selectedExercise, setSelectedExercise] = useState<WellnessItem | null>(null);
+  const [selectedType, setSelectedType] = useState<string>('');
 
   const tabs = [
     { key: 'all', label: 'All' },
@@ -136,6 +140,19 @@ export default function HomeScreen() {
             console.error('Failed to toggle favorite', err);
           }
         }}
+        onLogExercise={() => {
+          setSelectedExercise({
+            id: item.id,
+            title: item.name,
+            description: `${item.equipment} • ${item.muscle}`,
+            status: item.difficulty,
+            icon: getMuscleIcon(item.muscle),
+            category: 'exercise',
+            image: mappedImage
+          });
+          setSelectedType(item.type);
+          setLogModalVisible(true);
+        }}
       />
     );
   };
@@ -240,6 +257,17 @@ export default function HomeScreen() {
           </View>
         )}
       </ScrollView>
+
+      <LogWorkoutModal
+        visible={logModalVisible}
+        onClose={() => setLogModalVisible(false)}
+        exercise={selectedExercise}
+        type={selectedType}
+        onLogSuccess={() => {
+          alert('Workout logged successfully!');
+          router.push('/workouts');
+        }}
+      />
     </LinearGradient>
   );
 }

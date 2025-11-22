@@ -18,3 +18,16 @@ export interface WellnessItem {
   category: 'exercise' | 'nutrition' | 'wellness' | 'sleep' | string;
   image?: any; // optional local asset require(...) or remote uri
 }
+
+export interface WorkoutLog {
+  id: string;
+  exerciseId: string;
+  exerciseName: string;
+  type: string; // e.g., 'cardio', 'strength', etc.
+  date: string; // ISO date string
+  sets: number;
+  reps: number;
+  weight?: number; // optional, in kg
+  duration?: number; // optional, in minutes
+  notes?: string;
+}
