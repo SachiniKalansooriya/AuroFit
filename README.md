@@ -36,6 +36,11 @@ A comprehensive fitness and wellness tracking app built with React Native and Ex
 - Responsive design for different screen sizes
 - Themed components for consistent styling
 
+### 🔐 User Authentication
+- Secure user login and registration
+- Persistent session management with encrypted storage
+- Protected routes and user-specific data
+
 ## Technologies Used
 
 - **React Native** - Cross-platform mobile development
@@ -45,6 +50,8 @@ A comprehensive fitness and wellness tracking app built with React Native and Ex
 - **React Navigation** - Underlying navigation library used by expo-router
 - **AsyncStorage** - Local data persistence
 - **expo-linear-gradient** - Gradient backgrounds
+- **API-Ninjas** - Exercise data API (https://api-ninjas.com/api/exercises)
+- **DummyJSON** - Authentication API for demo purposes (https://dummyjson.com/)
 
 ## Project Structure
 
@@ -102,7 +109,16 @@ app/
    yarn install
    ```
 
-3. **Start the development server**
+3. **Environment Setup**
+   
+   Create a `.env` file in the root directory and add your API key:
+   ```env
+   EXPO_PUBLIC_API_NINJAS_KEY=your_api_ninjas_key_here
+   ```
+   
+   Get your free API key from [API-Ninjas](https://api-ninjas.com/api/exercises)
+
+4. **Start the development server**
    ```bash
    npx expo start
    ```
@@ -120,12 +136,17 @@ app/
 - `npx expo build:android` - Build for Android
 - `npx expo build:ios` - Build for iOS
 
-## Key Components
+### Key Components
 
 ### Services Layer
-- **WellnessService** - Manages exercise data and categories
+- **WellnessService** - Manages exercise data and categories (uses API-Ninjas)
 - **FavoritesService** - Handles favorite exercises persistence
 - **WorkoutService** - Manages workout logging and history
+
+### Authentication & Context
+- **AuthContext** - Manages user authentication state and session
+- **SecureStore** - Encrypted local storage for user credentials
+- Route protection based on authentication status
 
 ### UI Components
 - **WellnessCard** - Reusable exercise card with favorite/log functionality
@@ -138,6 +159,30 @@ app/
 - Bottom tab navigation for main screens
 - Stack navigation for detailed views and modals
 - Automatic route generation from file structure
+
+## External APIs
+
+### API-Ninjas Exercise API
+- **Purpose**: Provides comprehensive exercise database with detailed information
+- **Features**: 
+  - Exercise search by muscle group, type, and difficulty
+  - Detailed exercise instructions and equipment requirements
+  - Multiple exercise categories (strength, cardio, stretching, etc.)
+- **Usage**: Fetches exercise data dynamically for the app's workout features
+- **Rate Limits**: Free tier available with reasonable limits for development
+- **Documentation**: https://api-ninjas.com/api/exercises
+
+### DummyJSON Authentication API
+- **Purpose**: Demo authentication service for user login and registration
+- **Features**:
+  - User authentication with username/password
+  - User registration with profile creation
+  - Mock user data for testing purposes
+- **Usage**: Handles user authentication and session management
+- **Endpoints Used**:
+  - `POST /auth/login` - User login
+  - `POST /users/add` - User registration
+- **Documentation**: https://dummyjson.com/docs/auth
 
 ## Contributing
 
@@ -153,6 +198,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Exercise data and images sourced from fitness APIs
+- **API-Ninjas** - Exercise database API providing comprehensive fitness data
+- **DummyJSON** - Mock authentication API for demo purposes
+- Exercise data and images sourced from API-Ninjas exercise database
 - Icons provided by SF Symbols and custom assets
 - UI inspiration from modern fitness and wellness apps
