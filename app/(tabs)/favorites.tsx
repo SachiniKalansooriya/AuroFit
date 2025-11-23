@@ -37,7 +37,7 @@ export default function FavoritesScreen() {
       start={{ x: 0, y: 0 }}
       end={{ x: 0, y: 1 }}
     >
-      <ThemedText type="title">Favorites</ThemedText>
+      <ThemedText type="title" style={styles.title}>Favorites</ThemedText>
       {loading ? (
         <ThemedText style={styles.loading}>Loading favorites…</ThemedText>
       ) : items.length === 0 ? (
@@ -74,4 +74,8 @@ const styles = StyleSheet.create({
   },
   container: { flex: 1, padding: 16 },
   loading: { marginTop: 12 },
+  title: {
+    marginTop: 20,
+    marginHorizontal: 20,
+  },
 });

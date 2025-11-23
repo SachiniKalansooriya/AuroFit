@@ -84,9 +84,7 @@ export default function SettingsScreen() {
                   source={require('../../assets/images/user.jpg')}
                   style={styles.profileImage}
                 />
-                <View style={styles.profileBadge}>
-                  <ThemedText style={styles.profileBadgeText}>✓</ThemedText>
-                </View>
+               
               </View>
               <View style={styles.profileInfo}>
                 <ThemedText style={styles.username}>{user?.name || 'User'}</ThemedText>
@@ -247,25 +245,7 @@ const getStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
     height: 80,
     borderRadius: 40,
     borderWidth: 3,
-    borderColor: '#007AFF',
-  },
-  profileBadge: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#34C759',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#FFFFFF',
-  },
-  profileBadgeText: {
-    fontSize: 12,
-    color: '#FFFFFF',
-    fontWeight: 'bold',
+    borderColor: '#7b9fc6ff',
   },
   profileInfo: {
     flex: 1,

@@ -61,9 +61,7 @@ export default function WorkoutsScreen() {
     >
       {/* Exercise Header */}
       <View style={styles.workoutHeader}>
-        <View style={styles.iconBadge}>
-          <ThemedText style={styles.iconText}>💪</ThemedText>
-        </View>
+       
         <View style={styles.headerText}>
           <ThemedText type="subtitle" style={styles.exerciseName}>
             {item.exerciseName}
@@ -105,7 +103,7 @@ export default function WorkoutsScreen() {
       {/* Notes */}
       {item.notes && (
         <View style={styles.notesContainer}>
-          <ThemedText style={styles.notesLabel}>📝 Notes</ThemedText>
+          <ThemedText style={styles.notesLabel}>Notes</ThemedText>
           <ThemedText style={styles.notes}>{item.notes}</ThemedText>
         </View>
       )}
