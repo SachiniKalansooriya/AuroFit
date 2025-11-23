@@ -210,6 +210,7 @@ export default function WorkoutsScreen() {
             renderItem={renderWorkoutItem}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
             contentContainerStyle={styles.list}
           />
         )}

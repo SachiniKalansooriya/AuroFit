@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
-import { FlatList, Image, Pressable, ScrollView, StyleSheet, View, Platform, useColorScheme, ColorSchemeName } from 'react-native';
+import { FlatList, Image, Pressable, ScrollView, StyleSheet, View, Platform, useColorScheme, ColorSchemeName, Alert } from 'react-native';
 
 import { LogWorkoutModal } from '@/components/log-workout-modal';
 import { ThemedText } from '@/components/themed-text';
@@ -274,7 +274,7 @@ export default function HomeScreen() {
         exercise={selectedExercise}
         type={selectedType}
         onLogSuccess={() => {
-          alert('Workout logged successfully!');
+          Alert.alert('Success', 'Workout logged successfully!');
           router.push('/workouts');
         }}
       />

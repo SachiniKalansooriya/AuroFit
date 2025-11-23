@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Keyboard, Modal, StyleSheet, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, Modal, ScrollView, StyleSheet, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { WorkoutService } from '../src/services/workoutService';
 import { WellnessItem } from '../src/types/wellness';
 import { ThemedText } from './themed-text';
@@ -58,80 +58,84 @@ export const LogWorkoutModal: React.FC<LogWorkoutModalProps> = ({
     <Modal visible={visible} animationType="slide" transparent>
       <View style={styles.overlay}>
         <ThemedView style={styles.modal}>
-          <ThemedText type="title" style={styles.title}>
-            Log Workout
-          </ThemedText>
-          <ThemedText style={styles.exerciseName}>
-            {exercise?.title}
-          </ThemedText>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <ThemedText type="title" style={styles.title}>
+              Log Workout
+            </ThemedText>
+            <ThemedText style={styles.exerciseName}>
+              {exercise?.title}
+            </ThemedText>
 
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.inputRow}>
-              <View style={styles.inputGroup}>
-                <ThemedText style={styles.label}>Sets</ThemedText>
-                <TextInput
-                  style={styles.input}
-                  value={sets}
-                  onChangeText={setSets}
-                  keyboardType="numeric"
-                  placeholder="3"
-                />
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View>
+                <View style={styles.inputRow}>
+                  <View style={styles.inputGroup}>
+                    <ThemedText style={styles.label}>Sets</ThemedText>
+                    <TextInput
+                      style={styles.input}
+                      value={sets}
+                      onChangeText={setSets}
+                      keyboardType="numeric"
+                      placeholder="3"
+                    />
+                  </View>
+                  <View style={styles.inputGroup}>
+                    <ThemedText style={styles.label}>Reps</ThemedText>
+                    <TextInput
+                      style={styles.input}
+                      value={reps}
+                      onChangeText={setReps}
+                      keyboardType="numeric"
+                      placeholder="15"
+                    />
+                  </View>
+                </View>
+
+                <View style={styles.inputRow}>
+                  <View style={styles.inputGroup}>
+                    <ThemedText style={styles.label}>Weight (kg)</ThemedText>
+                    <TextInput
+                      style={styles.input}
+                      value={weight}
+                      onChangeText={setWeight}
+                      keyboardType="numeric"
+                      placeholder="20"
+                    />
+                  </View>
+                  <View style={styles.inputGroup}>
+                    <ThemedText style={styles.label}>Duration (min)</ThemedText>
+                    <TextInput
+                      style={styles.input}
+                      value={duration}
+                      onChangeText={setDuration}
+                      keyboardType="numeric"
+                      placeholder="30"
+                    />
+                  </View>
+                </View>
+
+                <View style={styles.inputGroup}>
+                  <ThemedText style={styles.label}>Notes</ThemedText>
+                  <TextInput
+                    style={[styles.input, styles.notesInput]}
+                    value={notes}
+                    onChangeText={setNotes}
+                    placeholder="Optional notes..."
+                    multiline
+                  />
+                </View>
               </View>
-              <View style={styles.inputGroup}>
-                <ThemedText style={styles.label}>Reps</ThemedText>
-                <TextInput
-                  style={styles.input}
-                  value={reps}
-                  onChangeText={setReps}
-                  keyboardType="numeric"
-                  placeholder="15"
-                />
-              </View>
+            </TouchableWithoutFeedback>
+
+            <View style={styles.buttonRow}>
+              <TouchableOpacity style={styles.cancelButton} onPress={handleClose}>
+                <ThemedText style={styles.cancelText}>Cancel</ThemedText>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+                <ThemedText style={styles.submitText}>Log Workout</ThemedText>
+              </TouchableOpacity>
             </View>
-
-            <View style={styles.inputRow}>
-              <View style={styles.inputGroup}>
-                <ThemedText style={styles.label}>Weight (kg)</ThemedText>
-                <TextInput
-                  style={styles.input}
-                  value={weight}
-                  onChangeText={setWeight}
-                  keyboardType="numeric"
-                  placeholder="20"
-                />
-              </View>
-              <View style={styles.inputGroup}>
-                <ThemedText style={styles.label}>Duration (min)</ThemedText>
-                <TextInput
-                  style={styles.input}
-                  value={duration}
-                  onChangeText={setDuration}
-                  keyboardType="numeric"
-                  placeholder="30"
-                />
-              </View>
-            </View>
-
-            <View style={styles.inputGroup}>
-              <ThemedText style={styles.label}>Notes</ThemedText>
-              <TextInput
-                style={[styles.input, styles.notesInput]}
-                value={notes}
-                onChangeText={setNotes}
-                placeholder="Optional notes..."
-                multiline
-              />
-            </View>
-          </TouchableWithoutFeedback>
-
-          <View style={styles.buttonRow}>
-            <TouchableOpacity style={styles.cancelButton} onPress={handleClose}>
-              <ThemedText style={styles.cancelText}>Cancel</ThemedText>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-              <ThemedText style={styles.submitText}>Log Workout</ThemedText>
-            </TouchableOpacity>
-          </View>
+          </ScrollView>
         </ThemedView>
       </View>
     </Modal>
@@ -188,7 +192,7 @@ const styles = StyleSheet.create({
   buttonRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 20,
+    marginTop: 40,
   },
   cancelButton: {
     flex: 1,
