@@ -1,7 +1,8 @@
 import { ThemedText } from '@/components/themed-text';
 import { WellnessCard } from '@/components/wellness-card';
 import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { FlatList, StyleSheet, View, useColorScheme } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import getExerciseImage from '../../src/config/exercise-images';
@@ -24,6 +25,13 @@ export default function FavoritesScreen() {
   useEffect(() => {
     load();
   }, []);
+
+  // Reload when screen gains focus so new favorites (added from detail) appear immediately
+  useFocusEffect(
+    useCallback(() => {
+      load();
+    }, [])
+  );
 
   const onToggle = async (item: ExerciseItem) => {
     await FavoritesService.toggle(item);
