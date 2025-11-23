@@ -16,22 +16,6 @@ interface WellnessCardProps {
 }
 
 export const WellnessCard: React.FC<WellnessCardProps> = ({ item, onPress, difficultyColor, isFavorite, onToggleFavorite, onLogExercise }) => {
-  const getStatusColor = (status: string) => {
-    if (difficultyColor) return difficultyColor;
-    switch (status) {
-      case 'Popular':
-        return Colors.light.tint;
-      case 'New':
-        return '#FF9500';
-      case 'Active':
-        return '#34C759';
-      case 'Recommended':
-        return '#007AFF';
-      default:
-        return Colors.light.text;
-    }
-  };
-
   const colorScheme = useColorScheme();
   const outlineStyle = {
     backgroundColor: 'transparent',

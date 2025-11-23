@@ -46,6 +46,7 @@ export default function HomeScreen() {
   ];
 
   const loadWellnessItems = async () => {
+    console.log('Loading wellness items...');
     try {
       const [popular, stretching, cardio, bodyonly, strength] = await Promise.all([
         WellnessService.getExercisesByDifficulty('beginner'),
@@ -59,6 +60,7 @@ export default function HomeScreen() {
       setCardioExercises(cardio);
       setBodyweightExercises(bodyonly);
       setStrengthExercises(strength);
+      console.log('Wellness items loaded successfully');
     } catch (error) {
       console.error('Error loading exercises:', error);
     } finally {
@@ -67,6 +69,7 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
+    console.log('HomeScreen useEffect triggered');
     loadWellnessItems();
     const randomTip = wellnessTips[Math.floor(Math.random() * wellnessTips.length)];
     setDailyTip(randomTip);
@@ -74,16 +77,19 @@ export default function HomeScreen() {
   }, []);
 
   const loadFavorites = async () => {
+    console.log('Loading favorites...');
     try {
       const favs = await FavoritesService.getAll();
       const favIds = new Set(favs.map(fav => fav.id));
       setFavoriteIds(favIds);
+      console.log('Favorites loaded:', favIds.size, 'items');
     } catch (error) {
       console.error('Error loading favorites:', error);
     }
   };
 
   const renderExerciseItem = ({ item }: { item: ExerciseItem }) => {
+    console.log('Rendering exercise item:', item.name);
     const getDifficultyColor = (difficulty: string) => {
       switch (difficulty.toLowerCase()) {
         case 'beginner': return '#b3bde1ff';
@@ -93,20 +99,8 @@ export default function HomeScreen() {
       }
     };
 
-    const getMuscleIcon = (muscle: string) => {
-      const icons: { [key: string]: string } = {
-        'biceps': '💪',
-        'triceps': '💪',
-        'chest': '🏋️',
-        'back': '🏋️',
-        'legs': '🦵',
-        'shoulders': '🤾',
-        'abdominals': '🏃',
-        'glutes': '🍑',
-        'calves': '🦵'
-      };
-      return icons[muscle.toLowerCase()] || '🏋️';
-    };
+    // Muscle emoji mapping removed — icons are now empty by default.
+    const getMuscleIcon = (_muscle: string) => '';
     const mappedImage = getExerciseImage(item.name);
     const isFav = favoriteIds.has(item.id);
 
@@ -117,7 +111,7 @@ export default function HomeScreen() {
           title: item.name,
           description: `${item.equipment} • ${item.muscle}`,
           status: item.difficulty,
-          icon: getMuscleIcon(item.muscle),
+          icon: '',
           category: '',
           image: mappedImage
         }}
@@ -125,8 +119,11 @@ export default function HomeScreen() {
         difficultyColor={getDifficultyColor(item.difficulty)}
         isFavorite={isFav}
         onToggleFavorite={async () => {
+          console.log('Toggling favorite for:', item.name);
+          console.log('Current favorite state:', isFav);
           try {
             const newState = await FavoritesService.toggle(item);
+            console.log('New favorite state:', newState);
             setFavoriteIds(prev => {
               const copy = new Set(prev);
               if (newState) copy.add(item.id); else copy.delete(item.id);
@@ -137,12 +134,14 @@ export default function HomeScreen() {
           }
         }}
         onLogExercise={() => {
+          console.log('Logging exercise:', item.name);
+          console.log('Setting selected exercise details:', item);
           setSelectedExercise({
             id: item.id,
             title: item.name,
             description: `${item.equipment} • ${item.muscle}`,
             status: item.difficulty,
-            icon: getMuscleIcon(item.muscle),
+            icon: '',
             category: 'exercise',
             image: mappedImage
           });
@@ -154,6 +153,7 @@ export default function HomeScreen() {
   };
 
   const renderSection = (title: string, data: ExerciseItem[], key: string) => (
+    console.log('Rendering section:', title, 'with', data.length, 'items'),
     <View style={styles.wellnessSection}>
       <ThemedText type="subtitle" style={[styles.sectionTitle, { color: colorScheme === 'dark' ? '#FFFFFF' : '#1a1a1a' }]}>{title}</ThemedText>
       <FlatList
@@ -167,6 +167,8 @@ export default function HomeScreen() {
       />
     </View>
   );
+
+  console.log('Rendering HomeScreen with', popularExercises.length + stretchingExercises.length + cardioExercises.length + bodyweightExercises.length + strengthExercises.length, 'total exercises and', favoriteIds.size, 'favorites');
 
   return (
     <LinearGradient

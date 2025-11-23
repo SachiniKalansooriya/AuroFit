@@ -41,6 +41,7 @@ export const LogWorkoutModal: React.FC<LogWorkoutModalProps> = ({
     };
 
     await WorkoutService.addWorkoutLog(logData);
+    console.log('Workout logged successfully:', logData);
     onLogSuccess?.();
     handleClose();
   };
