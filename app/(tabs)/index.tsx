@@ -84,10 +84,10 @@ export default function HomeScreen() {
   const renderExerciseItem = ({ item }: { item: ExerciseItem }) => {
     const getDifficultyColor = (difficulty: string) => {
       switch (difficulty.toLowerCase()) {
-        case 'beginner': return '#4CAF50';
-        case 'intermediate': return '#FF9800';
-        case 'expert': return '#F44336';
-        default: return '#2196F3';
+        case 'beginner': return '#b3bde1ff';
+        case 'intermediate': return '#09137aff';
+        case 'expert': return '#365496ff';
+        default: return '#09137aff';
       }
     };
 
