@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, Image, Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Image, Linking, Pressable, ScrollView, StyleSheet, View, useColorScheme, ColorSchemeName } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -13,6 +13,8 @@ import { ExerciseItem } from '../../src/types/wellness';
 export default function ExerciseDetailScreen() {
   const params = useLocalSearchParams() as { name?: string };
   const router = useRouter();
+  const colorScheme = useColorScheme();
+  const styles = getStyles(colorScheme);
   const name = params?.name;
 
   const [exercise, setExercise] = useState<ExerciseItem | null>(null);
@@ -67,7 +69,7 @@ export default function ExerciseDetailScreen() {
                 }
               }}
             >
-              <IconSymbol name="heart.fill" size={26} color={isFav ? '#007AFF' : '#BBBBBB'} />
+              <IconSymbol name="heart.fill" size={26} color={isFav ? '#425ee9ff' : '#BBBBBB'} />
             </Pressable>
           )}
         </View>
@@ -87,53 +89,17 @@ export default function ExerciseDetailScreen() {
             <ThemedText style={styles.meta}>Equipment: {exercise.equipment}</ThemedText>
             <ThemedText style={styles.meta}>Difficulty: {exercise.difficulty}</ThemedText>
 
-            <View style={styles.actionRow}>
-              <Pressable
-                style={styles.actionButton}
-                onPress={async () => {
-                  try {
-                    const text = exercise.instructions || '';
-                    // Try to use the standard clipboard API if available (web/dev); otherwise show notice
-                    const nav: any = (global as any).navigator;
-                    if (nav && nav.clipboard && typeof nav.clipboard.writeText === 'function') {
-                      await nav.clipboard.writeText(text);
-                      Alert.alert('Copied', 'Instructions copied to clipboard');
-                    } else {
-                      Alert.alert('Notice', 'Copy not available on this platform');
-                    }
-                  } catch (err) {
-                    console.error('Copy failed', err);
-                    Alert.alert('Error', 'Could not copy to clipboard');
-                  }
-                }}
-              >
-                <ThemedText style={styles.actionText}>Copy Instructions</ThemedText>
-              </Pressable>
-
-              <Pressable
-                style={[styles.actionButton, styles.secondaryButton]}
-                onPress={() => {
-                  const url = `https://www.google.com/search?q=${encodeURIComponent(exercise.name + ' exercise demo')}`;
-                  Linking.openURL(url).catch(err => {
-                    console.error('Open URL failed', err);
-                    Alert.alert('Error', 'Could not open browser');
-                  });
-                }}
-              >
-                <ThemedText style={styles.actionText}>Open Demo</ThemedText>
-              </Pressable>
-            </View>
-
             <ThemedText type="subtitle" style={styles.sectionTitle}>Instructions</ThemedText>
             {exercise.instructions ? (
-              // Split into sensible steps by newlines or sentence boundaries
-              (() => {
-                const raw = exercise.instructions || '';
-                const parts = raw.split(/(?:\r?\n)+|\.\s+/).map(p => p.trim()).filter(Boolean);
-                return parts.map((p, i) => (
-                  <ThemedText key={`step-${i}`} style={styles.instructionStep}>{`${i + 1}. ${p}`}</ThemedText>
-                ));
-              })()
+              <View>
+                {(() => {
+                  const raw = exercise.instructions || '';
+                  const parts = raw.split(/(?:\r?\n)+|\.\s+/).map(p => p.trim()).filter(Boolean);
+                  return parts.map((p, i) => (
+                    <ThemedText key={`step-${i}`} style={styles.instructionStep}>{`${i + 1}. ${p}`}</ThemedText>
+                  ));
+                })()}
+              </View>
             ) : (
               <ThemedText style={styles.instructions}>No instructions available.</ThemedText>
             )}
@@ -148,7 +114,7 @@ export default function ExerciseDetailScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -171,7 +137,7 @@ const styles = StyleSheet.create({
   },
   meta: {
     fontSize: 14,
-    color: '#444',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#444',
     marginBottom: 6,
   },
   sectionTitle: {
@@ -183,11 +149,11 @@ const styles = StyleSheet.create({
   instructions: {
     fontSize: 16,
     lineHeight: 22,
-    color: '#222',
+    color: colorScheme === 'dark' ? '#FFFFFF' : '#222',
   },
   headerImage: {
     width: '100%',
-    height: 200,
+    height: 400,
     borderRadius: 12,
     marginBottom: 12,
   },
@@ -212,24 +178,12 @@ const styles = StyleSheet.create({
     gap: 10,
     marginVertical: 12,
   },
-  actionButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
-    marginRight: 8,
-  },
-  secondaryButton: {
-    backgroundColor: '#E5F0FF',
-  },
-  actionText: {
-    color: '#fff',
-    fontWeight: '600',
-  },
+
+
   instructionStep: {
     fontSize: 16,
     lineHeight: 22,
-    color: '#222',
+    color: colorScheme === 'dark' ? '#FFFFFF' : '#222',
     marginBottom: 8,
   },
   titleRow: {
@@ -245,7 +199,7 @@ const styles = StyleSheet.create({
   },
   back: {
     marginTop: 24,
-    color: '#007AFF',
+    color: '#4279b3ff',
     fontSize: 16,
     fontWeight: '600',
   },

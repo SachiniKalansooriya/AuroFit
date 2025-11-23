@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#007AFF',
+    color: '#5184b9ff',
   },
   closeButton: {
     padding: 4,
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
   },
   glassSizeButtonActive: {
     borderColor: '#007AFF',
-    backgroundColor: '#007AFF',
+    backgroundColor: '#669bd3ff',
   },
   glassSizeText: {
     fontSize: 14,
@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   toggleActive: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#4c6dafff',
   },
   toggleKnob: {
     width: 24,
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
     borderColor: '#DDD',
   },
   saveButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#0e3b6bff',
   },
   cancelButtonText: {
     color: '#666',

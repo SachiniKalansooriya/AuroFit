@@ -2,7 +2,7 @@ import { ThemedText } from '@/components/themed-text';
 import { WellnessCard } from '@/components/wellness-card';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View, useColorScheme } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import getExerciseImage from '../../src/config/exercise-images';
 import FavoritesService from '../../src/services/favoritesService';
@@ -12,6 +12,7 @@ export default function FavoritesScreen() {
   const [items, setItems] = useState<ExerciseItem[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const colorScheme = useColorScheme();
 
   const load = async () => {
     setLoading(true);
@@ -31,7 +32,7 @@ export default function FavoritesScreen() {
 
   return (
     <LinearGradient
-      colors={['#FFFFFF', '#A1CEDC']}
+      colors={colorScheme === 'dark' ? ['#000000', '#1a1a1a'] : ['#FFFFFF', '#A1CEDC']}
       style={styles.gradient}
       start={{ x: 0, y: 0 }}
       end={{ x: 0, y: 1 }}

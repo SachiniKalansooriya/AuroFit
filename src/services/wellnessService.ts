@@ -6,19 +6,19 @@ export class WellnessService {
   private static readonly API_KEY = process.env.EXPO_PUBLIC_API_NINJAS_KEY || ''; // Set your API key in .env
 
   static async getPopularExercises(): Promise<ExerciseItem[]> {
-    return this.fetchExercises({ limit: 5 });
+    return this.fetchExercises({ limit: 10 });
   }
 
   static async getExercisesByMuscle(muscle: string): Promise<ExerciseItem[]> {
-    return this.fetchExercises({ muscle, limit: 5 });
+    return this.fetchExercises({ muscle, limit: 10 });
   }
 
   static async getExercisesByType(type: string): Promise<ExerciseItem[]> {
-    return this.fetchExercises({ type, limit: 5 });
+    return this.fetchExercises({ type, limit: 10 });
   }
 
   static async getExercisesByDifficulty(difficulty: string): Promise<ExerciseItem[]> {
-    return this.fetchExercises({ difficulty, limit: 5 });
+    return this.fetchExercises({ difficulty, limit: 10 });
   }
 
   private static async fetchExercises(params: any = {}): Promise<ExerciseItem[]> {
@@ -54,16 +54,6 @@ export class WellnessService {
       difficulty: exercise.difficulty,
       instructions: exercise.instructions
     }));
-  }
-
-  static async getWellnessItems(): Promise<ExerciseItem[]> {
-    return this.fetchExercises({ limit: 10 });
-  }
-
-  static async getWellnessItemById(id: string): Promise<ExerciseItem | null> {
-    // For simplicity, fetch all and find, but in production, fetch by id if API supports
-    const items = await this.getWellnessItems();
-    return items.find(item => item.id === id) || null;
   }
 
   static async getExerciseDetails(name: string): Promise<ExerciseItem | null> {

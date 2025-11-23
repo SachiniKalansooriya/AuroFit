@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Dimensions, ScrollView, StyleSheet, View, Platform } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, View, Platform, useColorScheme } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch, useSelector } from 'react-redux';
 import { ThemedText } from '@/components/themed-text';
@@ -12,6 +12,7 @@ const { width } = Dimensions.get('window');
 export default function WaterScreen() {
   const dispatch = useDispatch<AppDispatch>();
   const { weeklyHistory, loading, error } = useSelector((state: RootState) => state.water);
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
     dispatch(loadWaterData());
@@ -98,14 +99,16 @@ export default function WaterScreen() {
   if (loading) {
     return (
       <LinearGradient
-        colors={['#FFFFFF', '#A1CEDC']}
+        colors={colorScheme === 'dark' ? ['#000000', '#1a1a1a'] : ['#FFFFFF', '#A1CEDC']}
         style={styles.gradient}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
       >
         <View style={styles.loadingContainer}>
           <LinearGradient
-            colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
+            colors={colorScheme === 'dark' 
+              ? ['rgba(30, 30, 30, 0.95)', 'rgba(20, 20, 20, 0.85)'] 
+              : ['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
             style={styles.glassCard}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
@@ -125,7 +128,7 @@ export default function WaterScreen() {
 
   return (
     <LinearGradient
-      colors={['#FFFFFF', '#A1CEDC']}
+      colors={colorScheme === 'dark' ? ['#000000', '#1a1a1a'] : ['#FFFFFF', '#A1CEDC']}
       style={styles.gradient}
       start={{ x: 0, y: 0 }}
       end={{ x: 0, y: 1 }}
@@ -148,7 +151,9 @@ export default function WaterScreen() {
         {/* Weekly Chart */}
         <View style={styles.chartSection}>
           <LinearGradient
-            colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
+            colors={colorScheme === 'dark' 
+              ? ['rgba(30, 30, 30, 0.95)', 'rgba(20, 20, 20, 0.85)'] 
+              : ['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
             style={styles.glassCard}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
@@ -206,14 +211,16 @@ export default function WaterScreen() {
         {/* Statistics */}
         <View style={styles.statsSection}>
           <LinearGradient
-            colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
+            colors={colorScheme === 'dark' 
+              ? ['rgba(30, 30, 30, 0.95)', 'rgba(20, 20, 20, 0.85)'] 
+              : ['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
             style={styles.glassCard}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
           >
             <View style={styles.sectionHeader}>
              
-              <ThemedText type="subtitle" style={styles.sectionTitle}>This Week's Stats</ThemedText>
+              <ThemedText type="subtitle" style={styles.sectionTitle}>This Week&apos;s Stats</ThemedText>
             </View>
 
             <View style={styles.statsGrid}>
@@ -325,7 +332,6 @@ const styles = StyleSheet.create({
   loadingText: {
     textAlign: 'center',
     fontSize: 16,
-    color: '#666',
     fontWeight: '500',
   },
   headerContainer: {
@@ -352,12 +358,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1a1a1a',
     marginBottom: 2,
   },
   subtitle: {
     fontSize: 14,
-    color: '#666',
     fontWeight: '500',
   },
   quickStatsContainer: {
@@ -391,7 +395,6 @@ const styles = StyleSheet.create({
   },
   quickStatLabel: {
     fontSize: 14,
-    color: '#666',
     fontWeight: '600',
     marginBottom: 12,
   },
@@ -438,7 +441,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1a1a1a',
   },
   chart: {
     flexDirection: 'row',
@@ -483,12 +485,10 @@ const styles = StyleSheet.create({
   barValue: {
     fontSize: 11,
     fontWeight: 'bold',
-    color: '#333',
   },
   dayLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#666',
     marginTop: 8,
   },
   todayLabel: {
@@ -497,7 +497,6 @@ const styles = StyleSheet.create({
   },
   goalLabel: {
     fontSize: 10,
-    color: '#999',
     marginTop: 2,
   },
   legend: {
@@ -521,7 +520,6 @@ const styles = StyleSheet.create({
   },
   legendText: {
     fontSize: 12,
-    color: '#666',
     fontWeight: '500',
   },
   statsGrid: {
@@ -550,7 +548,6 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 12,
-    color: '#666',
     textAlign: 'center',
     fontWeight: '500',
   },
@@ -584,7 +581,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     lineHeight: 20,
-    color: '#555',
     fontWeight: '500',
   },
 });

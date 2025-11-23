@@ -1,12 +1,14 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import React, { useEffect, useState } from 'react';
-import { Appearance, Image, ScrollView, StyleSheet, Switch, View, Pressable, Platform } from 'react-native';
+import { Appearance, Image, ScrollView, StyleSheet, Switch, View, Pressable, Platform, useColorScheme, ColorSchemeName } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../src/contexts/AuthContext';
 
 export default function SettingsScreen() {
   const { user, logout } = useAuth();
+  const colorScheme = useColorScheme();
+  const styles = getStyles(colorScheme);
   const [isDarkMode, setIsDarkMode] = useState(Appearance.getColorScheme() === 'dark');
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -32,7 +34,9 @@ export default function SettingsScreen() {
 
   return (
     <LinearGradient
-      colors={['#FFFFFF', '#A1CEDC']}
+      colors={colorScheme === 'dark' 
+        ? ['#1a1a1a', '#2d3748'] 
+        : ['#FFFFFF', '#A1CEDC']}
       style={styles.gradient}
       start={{ x: 0, y: 0 }}
       end={{ x: 0, y: 1 }}
@@ -45,7 +49,9 @@ export default function SettingsScreen() {
         {/* Header */}
         <View style={styles.headerContainer}>
           <LinearGradient
-            colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
+            colors={colorScheme === 'dark' 
+              ? ['rgba(30, 30, 30, 0.95)', 'rgba(20, 20, 20, 0.85)'] 
+              : ['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
             style={styles.glassCard}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
@@ -60,7 +66,9 @@ export default function SettingsScreen() {
         {/* Profile Section */}
         <View style={styles.sectionContainer}>
           <LinearGradient
-            colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
+            colors={colorScheme === 'dark' 
+              ? ['rgba(30, 30, 30, 0.95)', 'rgba(20, 20, 20, 0.85)'] 
+              : ['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
             style={styles.glassCard}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
@@ -94,7 +102,9 @@ export default function SettingsScreen() {
         {/* Appearance Section */}
         <View style={styles.sectionContainer}>
           <LinearGradient
-            colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
+            colors={colorScheme === 'dark' 
+              ? ['rgba(30, 30, 30, 0.95)', 'rgba(20, 20, 20, 0.85)'] 
+              : ['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
             style={styles.glassCard}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
@@ -142,7 +152,7 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
   gradient: {
     flex: 1,
   },
@@ -195,7 +205,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colorScheme === 'dark' ? '#FFFFFF' : '#1a1a1a',
   },
   sectionContainer: {
     marginBottom: 16,
@@ -222,7 +232,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colorScheme === 'dark' ? '#FFFFFF' : '#1a1a1a',
   },
   profileContainer: {
     flexDirection: 'row',
@@ -263,12 +273,12 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colorScheme === 'dark' ? '#FFFFFF' : '#1a1a1a',
     marginBottom: 4,
   },
   email: {
     fontSize: 14,
-    color: '#666',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#666',
     marginBottom: 8,
   },
   editButton: {
@@ -308,12 +318,12 @@ const styles = StyleSheet.create({
   preferenceLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1a1a1a',
+    color: colorScheme === 'dark' ? '#FFFFFF' : '#1a1a1a',
     marginBottom: 2,
   },
   preferenceDescription: {
     fontSize: 13,
-    color: '#666',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#666',
   },
   arrow: {
     fontSize: 24,
@@ -322,7 +332,7 @@ const styles = StyleSheet.create({
   },
   versionText: {
     fontSize: 14,
-    color: '#666',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#666',
     fontWeight: '500',
   },
   logoutButtonContainer: {
@@ -353,7 +363,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 13,
-    color: '#999',
+    color: colorScheme === 'dark' ? '#AAAAAA' : '#999',
     fontStyle: 'italic',
   },
 });

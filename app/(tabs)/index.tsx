@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
-import { FlatList, Image, Pressable, ScrollView, StyleSheet, View, Platform, useColorScheme } from 'react-native';
+import { FlatList, Image, Pressable, ScrollView, StyleSheet, View, Platform, useColorScheme, ColorSchemeName } from 'react-native';
 
 import { LogWorkoutModal } from '@/components/log-workout-modal';
 import { ThemedText } from '@/components/themed-text';
@@ -19,6 +19,7 @@ import getExerciseImage from '../../src/config/exercise-images';
 export default function HomeScreen() {
   const { user } = useAuth();
   const colorScheme = useColorScheme();
+  const styles = getStyles(colorScheme);
   const [popularExercises, setPopularExercises] = useState<ExerciseItem[]>([]);
   const [stretchingExercises, setStretchingExercises] = useState<ExerciseItem[]>([]);
   const [cardioExercises, setCardioExercises] = useState<ExerciseItem[]>([]);
@@ -178,29 +179,22 @@ export default function HomeScreen() {
         {/* Header with Glass Effect */}
         <View style={styles.header}>
         
-            <ThemedText type="title" style={[styles.greeting, { color: colorScheme === 'dark' ? '#FFFFFF' : '#1a1a1a' }]}>
+            <ThemedText type="title" style={[styles.greeting]}>
               Hello, {user?.name}! 
             </ThemedText>
          
         
         </View>
         
-        {/* Daily Tip Section - Glassy */}
+        {/* Daily Tip Section - With Image Background */}
         <View style={styles.dailyTipContainer}>
-          <LinearGradient
-            colors={colorScheme === 'dark' 
-              ? ['rgba(30, 30, 30, 0.95)', 'rgba(20, 20, 20, 0.85)'] 
-              : ['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
-            style={styles.glassCard}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-          >
+          <Image source={require('../../assets/images/img4.jpg')} style={styles.dailyTipImage} resizeMode="cover" />
+          <View style={styles.dailyTipOverlay}>
             <View style={styles.tipHeader}>
-             
               <ThemedText type="subtitle" style={styles.dailyTipTitle}>Daily Wellness Tip</ThemedText>
             </View>
-            <ThemedText style={[styles.dailyTipText, { color: colorScheme === 'dark' ? '#CCCCCC' : '#333' }]}>{dailyTip}</ThemedText>
-          </LinearGradient>
+            <ThemedText style={styles.dailyTipText}>{dailyTip}</ThemedText>
+          </View>
         </View>
         
         {/* Water Tracker Section */}
@@ -228,7 +222,7 @@ export default function HomeScreen() {
               <LinearGradient
                 colors={
                   activeSection === t.key
-                    ? ['#007AFF', '#0056CC']
+                    ? ['#7586a6ff', '#305a94ff']
                     : colorScheme === 'dark'
                     ? ['rgba(60, 60, 60, 0.9)', 'rgba(40, 40, 40, 0.7)']
                     : ['rgba(255, 255, 255, 0.9)', 'rgba(255, 255, 255, 0.7)']
@@ -294,7 +288,7 @@ export default function HomeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
   gradient: {
     flex: 1,
   },
@@ -328,17 +322,29 @@ const styles = StyleSheet.create({
   greeting: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colorScheme === 'dark' ? '#FFFFFF' : '#3d63c3ff',
     marginBottom: 4,
   },
   subGreeting: {
     fontSize: 16,
-    color: '#555',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#555',
     fontWeight: '500',
   },
   dailyTipContainer: {
     marginHorizontal: 20,
     marginBottom: 16,
+  },
+  dailyTipImage: {
+    width: '100%',
+    height: 150,
+    borderRadius: 20,
+  },
+  dailyTipOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    borderRadius: 20,
+    justifyContent: 'center',
+    padding: 20,
   },
   tipHeader: {
     flexDirection: 'row',
@@ -362,13 +368,13 @@ const styles = StyleSheet.create({
   dailyTipTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#007AFF',
+    color: '#FFFFFF',
     flex: 1,
   },
   dailyTipText: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#333',
+    color: '#FFFFFF',
     fontWeight: '500',
   },
   trackerContainer: {
@@ -424,7 +430,7 @@ const styles = StyleSheet.create({
   tabText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#555',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#555',
   },
   tabTextActive: {
     color: '#FFFFFF',
@@ -441,7 +447,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colorScheme === 'dark' ? '#FFFFFF' : '#1a1a1a',
     textShadowColor: 'rgba(255, 255, 255, 0.8)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 2,
@@ -459,7 +465,7 @@ const styles = StyleSheet.create({
   loadingText: {
     textAlign: 'center',
     fontSize: 16,
-    color: '#666',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#666',
     fontWeight: '500',
   },
 });

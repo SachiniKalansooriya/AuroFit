@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import React, { useState } from 'react';
-import { FlatList, StyleSheet, View, Platform, Pressable } from 'react-native';
+import { FlatList, StyleSheet, View, Platform, Pressable, useColorScheme, ColorSchemeName } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { wellnessTips } from '../../src/constants/tips';
 
@@ -25,6 +25,8 @@ const categorizedTips = [
 
 export default function TipsScreen() {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['Hydration']));
+  const colorScheme = useColorScheme();
+  const styles = getStyles(colorScheme);
 
   const toggleCategory = (category: string) => {
     setExpandedCategories(prev => {
@@ -40,7 +42,9 @@ export default function TipsScreen() {
 
   const renderTip = ({ item, index }: { item: string; index: number }) => (
     <LinearGradient
-      colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
+      colors={colorScheme === 'dark' 
+        ? ['rgba(30, 30, 30, 0.95)', 'rgba(20, 20, 20, 0.85)'] 
+        : ['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
       style={styles.tipItem}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
@@ -103,7 +107,7 @@ export default function TipsScreen() {
 
   return (
     <LinearGradient
-      colors={['#FFFFFF', '#A1CEDC']}
+      colors={colorScheme === 'dark' ? ['#000000', '#1a1a1a'] : ['#FFFFFF', '#A1CEDC']}
       style={styles.gradient}
       start={{ x: 0, y: 0 }}
       end={{ x: 0, y: 1 }}
@@ -136,7 +140,7 @@ export default function TipsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
   gradient: {
     flex: 1,
   },
@@ -186,12 +190,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colorScheme === 'dark' ? '#FFFFFF' : '#1a1a1a',
     marginBottom: 2,
   },
   subtitle: {
     fontSize: 14,
-    color: '#666',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#666',
     fontWeight: '500',
   },
   list: {
@@ -240,12 +244,12 @@ const styles = StyleSheet.create({
   },
   categoryCount: {
     fontSize: 13,
-    color: '#666',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#666',
     fontWeight: '500',
   },
   expandIcon: {
     fontSize: 14,
-    color: '#999',
+    color: colorScheme === 'dark' ? '#AAAAAA' : '#999',
     marginLeft: 8,
   },
   tipsContainer: {
@@ -290,7 +294,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
     lineHeight: 22,
-    color: '#333',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#333',
     fontWeight: '500',
   },
 });

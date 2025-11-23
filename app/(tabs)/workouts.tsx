@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View, Platform } from 'react-native';
+import { FlatList, StyleSheet, View, Platform, useColorScheme, ColorSchemeName } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { WorkoutService } from '../../src/services/workoutService';
 import { WorkoutLog } from '../../src/types/wellness';
@@ -9,6 +9,8 @@ import { WorkoutLog } from '../../src/types/wellness';
 export default function WorkoutsScreen() {
   const [workouts, setWorkouts] = useState<WorkoutLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const colorScheme = useColorScheme();
+  const styles = getStyles(colorScheme);
 
   useEffect(() => {
     loadWorkouts();
@@ -50,7 +52,9 @@ export default function WorkoutsScreen() {
 
   const renderWorkoutItem = ({ item }: { item: WorkoutLog }) => (
     <LinearGradient
-      colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
+      colors={colorScheme === 'dark' 
+        ? ['rgba(30, 30, 30, 0.95)', 'rgba(20, 20, 20, 0.85)'] 
+        : ['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
       style={styles.workoutItem}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
@@ -132,7 +136,7 @@ export default function WorkoutsScreen() {
 
   return (
     <LinearGradient
-      colors={['#FFFFFF', '#A1CEDC']}
+      colors={colorScheme === 'dark' ? ['#000000', '#1a1a1a'] : ['#FFFFFF', '#A1CEDC']}
       style={styles.gradient}
       start={{ x: 0, y: 0 }}
       end={{ x: 0, y: 1 }}
@@ -161,7 +165,7 @@ export default function WorkoutsScreen() {
             >
               <View style={styles.summaryHeader}>
                
-                <ThemedText style={styles.summaryTitle}>This Week's Stats</ThemedText>
+                <ThemedText style={styles.summaryTitle}>This Week&apos;s Stats</ThemedText>
               </View>
 
               
@@ -190,7 +194,9 @@ export default function WorkoutsScreen() {
         {workouts.length === 0 ? (
           <View style={styles.emptyContainer}>
             <LinearGradient
-              colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
+              colors={colorScheme === 'dark' 
+                ? ['rgba(30, 30, 30, 0.95)', 'rgba(20, 20, 20, 0.85)'] 
+                : ['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
               style={styles.glassCard}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
@@ -214,7 +220,7 @@ export default function WorkoutsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
   gradient: {
     flex: 1,
   },
@@ -264,12 +270,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colorScheme === 'dark' ? '#FFFFFF' : '#1a1a1a',
     marginBottom: 2,
   },
   subtitle: {
     fontSize: 14,
-    color: '#666',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#666',
     fontWeight: '500',
   },
   summaryContainer: {
@@ -349,7 +355,7 @@ const styles = StyleSheet.create({
   durationTitle: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#333',
+    color: colorScheme === 'dark' ? '#FFFFFF' : '#333',
     marginBottom: 8,
   },
   durationItem: {
@@ -362,7 +368,7 @@ const styles = StyleSheet.create({
   },
   durationName: {
     fontSize: 14,
-    color: '#555',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#555',
     fontWeight: '500',
     flex: 1,
   },
@@ -417,12 +423,12 @@ const styles = StyleSheet.create({
   exerciseName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: colorScheme === 'dark' ? '#FFFFFF' : '#1a1a1a',
     marginBottom: 2,
   },
   date: {
     fontSize: 13,
-    color: '#666',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#666',
     fontWeight: '500',
   },
   detailsGrid: {
@@ -463,13 +469,13 @@ const styles = StyleSheet.create({
   notesLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#555',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#555',
     marginBottom: 4,
   },
   notes: {
     fontSize: 14,
     fontStyle: 'italic',
-    color: '#666',
+    color: colorScheme === 'dark' ? '#AAAAAA' : '#666',
     lineHeight: 20,
   },
   emptyContainer: {
@@ -487,13 +493,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: colorScheme === 'dark' ? '#FFFFFF' : '#333',
     marginBottom: 8,
   },
   emptySubtext: {
     textAlign: 'center',
     fontSize: 14,
-    color: '#666',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#666',
   },
   loadingContainer: {
     flex: 1,
@@ -504,7 +510,7 @@ const styles = StyleSheet.create({
   loadingText: {
     textAlign: 'center',
     fontSize: 16,
-    color: '#666',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#666',
     fontWeight: '500',
   },
 });

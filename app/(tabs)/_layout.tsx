@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#007AFF',
-    fontStyle: 'italic',
+    color: '#1c61abff',
+    fontFamily: 'inter',
   },
 });

@@ -140,7 +140,7 @@ const getStyles = (colorScheme: string | null | undefined) => StyleSheet.create(
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#007AFF',
+    color: '#4187d2ff',
   },
   headerButtons: {
     flexDirection: 'row',
@@ -164,7 +164,7 @@ const getStyles = (colorScheme: string | null | undefined) => StyleSheet.create(
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#007AFF',
+    backgroundColor: '#548bc6ff',
     borderRadius: 6,
   },
   progressTextContainer: {
@@ -183,13 +183,13 @@ const getStyles = (colorScheme: string | null | undefined) => StyleSheet.create(
   },
   remainingText: {
     fontSize: 14,
-    color: '#FF9500',
+    color: '#1a5998ff',
     textAlign: 'center',
     marginBottom: 12,
   },
   completedText: {
     fontSize: 14,
-    color: '#4CAF50',
+    color: '#4c60afff',
     textAlign: 'center',
     marginBottom: 12,
     fontWeight: '600',
@@ -212,7 +212,7 @@ const getStyles = (colorScheme: string | null | undefined) => StyleSheet.create(
     elevation: 4,
   },
   addButton: {
-    backgroundColor: '#134ee2ff',
+    backgroundColor: '#1a3a8bff',
   },
   removeButton: {
     backgroundColor: colorScheme === 'dark' ? 'rgba(60, 60, 60, 0.9)' : '#ffffffff',

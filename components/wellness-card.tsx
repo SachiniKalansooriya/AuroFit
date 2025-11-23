@@ -48,7 +48,7 @@ export const WellnessCard: React.FC<WellnessCardProps> = ({ item, onPress, diffi
         <ThemedView style={styles.imageRow}>
           <ThemedView style={styles.imagePlaceholder}>
             {item.image ? (
-              <Image source={item.image} style={styles.cardImage} resizeMode="cover" />
+              <Image source={item.image} style={styles.cardImage} resizeMode="contain" />
             ) : (
               <ThemedText style={styles.icon}>{item.icon}</ThemedText>
             )}
