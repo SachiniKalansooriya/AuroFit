@@ -75,7 +75,10 @@ export const WellnessCard: React.FC<WellnessCardProps> = ({ item, onPress, diffi
               {item.category.charAt(0).toUpperCase() + item.category.slice(1)}
             </ThemedText>
             {onLogExercise && (
-              <TouchableOpacity onPress={onLogExercise} style={styles.logButton}>
+              <TouchableOpacity
+                onPress={(e: any) => { e.stopPropagation?.(); onLogExercise(); }}
+                style={styles.logButton}
+              >
                 <IconSymbol name="plus" size={16} color={Colors.light.tint} />
               </TouchableOpacity>
             )}
