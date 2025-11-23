@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, View, useColorScheme } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -14,6 +14,7 @@ interface WaterTrackerProps {
 export function WaterTracker({ onSettingsPress, onHistoryPress }: WaterTrackerProps) {
   const dispatch = useDispatch<AppDispatch>();
   const { currentIntake, goal, loading, error } = useSelector((state: RootState) => state.water);
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
     dispatch(loadWaterData());
@@ -54,18 +55,16 @@ export function WaterTracker({ onSettingsPress, onHistoryPress }: WaterTrackerPr
 
   if (loading || !goal) {
     return (
-      <ThemedView style={styles.container}>
+      <ThemedView style={getStyles(colorScheme).container}>
         <ThemedText>Loading water tracker...</ThemedText>
       </ThemedView>
     );
   }
 
-  const progress = getProgressPercentage();
-  const glassesCount = getGlassesCount();
-  const remainingGlasses = getRemainingGlasses();
+  const styles = getStyles(colorScheme);
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={[styles.container, { backgroundColor: colorScheme === 'dark' ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)' }]}>
       <View style={styles.header}>
         <ThemedText type="subtitle" style={styles.title}>Water Tracker</ThemedText>
         <View style={styles.headerButtons}>
@@ -80,21 +79,21 @@ export function WaterTracker({ onSettingsPress, onHistoryPress }: WaterTrackerPr
 
       <View style={styles.progressContainer}>
         <View style={styles.progressBar}>
-          <View style={[styles.progressFill, { width: `${progress}%` }]} />
+          <View style={[styles.progressFill, { width: `${getProgressPercentage()}%` }]} />
         </View>
         <View style={styles.progressTextContainer}>
           <ThemedText style={styles.progressText}>
             {Math.round(currentIntake)}ml / {goal.dailyGoal}ml
           </ThemedText>
           <ThemedText style={styles.glassesText}>
-            {glassesCount} glasses ({goal.glassSize}ml each)
+            {getGlassesCount()} glasses ({goal.glassSize}ml each)
           </ThemedText>
         </View>
       </View>
 
-      {remainingGlasses > 0 ? (
+      {getRemainingGlasses() > 0 ? (
         <ThemedText style={styles.remainingText}>
-          {remainingGlasses} more glass{remainingGlasses !== 1 ? 'es' : ''} to go!
+          {getRemainingGlasses()} more glass{getRemainingGlasses() !== 1 ? 'es' : ''} to go!
         </ThemedText>
       ) : (
         <ThemedText style={styles.completedText}>
@@ -106,9 +105,9 @@ export function WaterTracker({ onSettingsPress, onHistoryPress }: WaterTrackerPr
         <Pressable
           style={[styles.button, styles.removeButton]}
           onPress={removeGlass}
-          disabled={glassesCount === 0}
+          disabled={getGlassesCount() === 0}
         >
-          <ThemedText style={[styles.removebuttonText, glassesCount === 0 && styles.disabledText]}>
+          <ThemedText style={[styles.removebuttonText, getGlassesCount() === 0 && styles.disabledText]}>
             −
           </ThemedText>
         </Pressable>
@@ -121,9 +120,8 @@ export function WaterTracker({ onSettingsPress, onHistoryPress }: WaterTrackerPr
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colorScheme: string | null | undefined) => StyleSheet.create({
   container: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
@@ -159,7 +157,7 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: 12,
-    backgroundColor: 'rgba(0, 122, 255, 0.2)',
+    backgroundColor: colorScheme === 'dark' ? 'rgba(0, 122, 255, 0.3)' : 'rgba(0, 122, 255, 0.2)',
     borderRadius: 6,
     overflow: 'hidden',
     marginBottom: 8,
@@ -177,11 +175,11 @@ const styles = StyleSheet.create({
   progressText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: colorScheme === 'dark' ? '#FFFFFF' : '#333',
   },
   glassesText: {
     fontSize: 12,
-    color: '#666',
+    color: colorScheme === 'dark' ? '#CCCCCC' : '#666',
   },
   remainingText: {
     fontSize: 14,
@@ -217,7 +215,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#134ee2ff',
   },
   removeButton: {
-    backgroundColor: '#ffffffff',
+    backgroundColor: colorScheme === 'dark' ? 'rgba(60, 60, 60, 0.9)' : '#ffffffff',
   },
   addbuttonText: {
     fontSize: 28,
@@ -227,7 +225,7 @@ const styles = StyleSheet.create({
   },
     removebuttonText: {
     fontSize: 28,
-    color: '#000000ff',
+    color: colorScheme === 'dark' ? '#FFFFFF' : '#000000ff',
     fontWeight: 'bold',
     lineHeight: 32,
   },

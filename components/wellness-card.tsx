@@ -134,7 +134,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: Colors.light.text,
     flex: 1,
     marginRight: 8,
   },
@@ -151,7 +150,6 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 14,
     lineHeight: 20,
-    color: Colors.light.text,
     opacity: 0.8,
     marginBottom: 8,
   },
@@ -160,7 +158,6 @@ const styles = StyleSheet.create({
   },
   category: {
     fontSize: 12,
-    color: Colors.light.tint,
     fontWeight: '500',
     textTransform: 'capitalize',
   },

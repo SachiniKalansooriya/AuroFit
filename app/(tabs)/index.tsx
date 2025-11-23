@@ -1,6 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
-import { FlatList, Image, Pressable, ScrollView, StyleSheet, View, Platform } from 'react-native';
+import { FlatList, Image, Pressable, ScrollView, StyleSheet, View, Platform, useColorScheme } from 'react-native';
 
 import { LogWorkoutModal } from '@/components/log-workout-modal';
 import { ThemedText } from '@/components/themed-text';
@@ -18,6 +18,7 @@ import getExerciseImage from '../../src/config/exercise-images';
 
 export default function HomeScreen() {
   const { user } = useAuth();
+  const colorScheme = useColorScheme();
   const [popularExercises, setPopularExercises] = useState<ExerciseItem[]>([]);
   const [stretchingExercises, setStretchingExercises] = useState<ExerciseItem[]>([]);
   const [cardioExercises, setCardioExercises] = useState<ExerciseItem[]>([]);
@@ -153,7 +154,7 @@ export default function HomeScreen() {
 
   const renderSection = (title: string, data: ExerciseItem[], key: string) => (
     <View style={styles.wellnessSection}>
-      <ThemedText type="subtitle" style={styles.sectionTitle}>{title}</ThemedText>
+      <ThemedText type="subtitle" style={[styles.sectionTitle, { color: colorScheme === 'dark' ? '#FFFFFF' : '#1a1a1a' }]}>{title}</ThemedText>
       <FlatList
         data={data}
         renderItem={renderExerciseItem}
@@ -161,14 +162,14 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
         contentContainerStyle={styles.listContainer}
-        ListEmptyComponent={<ThemedText style={styles.loadingText}>No exercises available</ThemedText>}
+        ListEmptyComponent={<ThemedText style={[styles.loadingText, { color: colorScheme === 'dark' ? '#CCCCCC' : '#666' }]}>No exercises available</ThemedText>}
       />
     </View>
   );
 
   return (
     <LinearGradient
-      colors={['#FFFFFF', '#A1CEDC']}
+      colors={colorScheme === 'dark' ? ['#000000', '#1a1a1a'] : ['#FFFFFF', '#A1CEDC']}
       style={styles.gradient}
       start={{ x: 0, y: 0 }}
       end={{ x: 0, y: 1 }}
@@ -177,7 +178,7 @@ export default function HomeScreen() {
         {/* Header with Glass Effect */}
         <View style={styles.header}>
         
-            <ThemedText type="title" style={styles.greeting}>
+            <ThemedText type="title" style={[styles.greeting, { color: colorScheme === 'dark' ? '#FFFFFF' : '#1a1a1a' }]}>
               Hello, {user?.name}! 
             </ThemedText>
          
@@ -187,7 +188,9 @@ export default function HomeScreen() {
         {/* Daily Tip Section - Glassy */}
         <View style={styles.dailyTipContainer}>
           <LinearGradient
-            colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
+            colors={colorScheme === 'dark' 
+              ? ['rgba(30, 30, 30, 0.95)', 'rgba(20, 20, 20, 0.85)'] 
+              : ['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
             style={styles.glassCard}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
@@ -196,7 +199,7 @@ export default function HomeScreen() {
              
               <ThemedText type="subtitle" style={styles.dailyTipTitle}>Daily Wellness Tip</ThemedText>
             </View>
-            <ThemedText style={styles.dailyTipText}>{dailyTip}</ThemedText>
+            <ThemedText style={[styles.dailyTipText, { color: colorScheme === 'dark' ? '#CCCCCC' : '#333' }]}>{dailyTip}</ThemedText>
           </LinearGradient>
         </View>
         
@@ -226,6 +229,8 @@ export default function HomeScreen() {
                 colors={
                   activeSection === t.key
                     ? ['#007AFF', '#0056CC']
+                    : colorScheme === 'dark'
+                    ? ['rgba(60, 60, 60, 0.9)', 'rgba(40, 40, 40, 0.7)']
                     : ['rgba(255, 255, 255, 0.9)', 'rgba(255, 255, 255, 0.7)']
                 }
                 style={styles.tabGradient}
@@ -235,6 +240,7 @@ export default function HomeScreen() {
                 <ThemedText 
                   style={[
                     styles.tabText, 
+                    { color: colorScheme === 'dark' ? '#CCCCCC' : '#555' },
                     activeSection === t.key && styles.tabTextActive
                   ]}
                 >
@@ -249,7 +255,7 @@ export default function HomeScreen() {
         {loading ? (
           <View style={styles.loadingContainer}>
             <View style={styles.glassCard}>
-              <ThemedText style={styles.loadingText}>Loading exercises...</ThemedText>
+              <ThemedText style={[styles.loadingText, { color: colorScheme === 'dark' ? '#CCCCCC' : '#666' }]}>Loading exercises...</ThemedText>
             </View>
           </View>
         ) : (
