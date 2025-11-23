@@ -116,7 +116,7 @@ export default function HomeScreen() {
           description: `${item.equipment} • ${item.muscle}`,
           status: item.difficulty,
           icon: getMuscleIcon(item.muscle),
-          category: 'exercise',
+          category: '',
           image: mappedImage
         }}
         onPress={() => router.push({ pathname: '/exercise/[name]', params: { name: item.name } })}
@@ -176,12 +176,12 @@ export default function HomeScreen() {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {/* Header with Glass Effect */}
         <View style={styles.header}>
-          <View style={styles.glassCard}>
+        
             <ThemedText type="title" style={styles.greeting}>
-              Hello, {user?.name}! 👋
+              Hello, {user?.name}! 
             </ThemedText>
-            <ThemedText style={styles.subGreeting}>Ready for your workout?</ThemedText>
-          </View>
+         
+        
         </View>
         
         {/* Daily Tip Section - Glassy */}
@@ -193,9 +193,7 @@ export default function HomeScreen() {
             end={{ x: 1, y: 1 }}
           >
             <View style={styles.tipHeader}>
-              <View style={styles.iconBadge}>
-                <ThemedText style={styles.iconText}>💡</ThemedText>
-              </View>
+             
               <ThemedText type="subtitle" style={styles.dailyTipTitle}>Daily Wellness Tip</ThemedText>
             </View>
             <ThemedText style={styles.dailyTipText}>{dailyTip}</ThemedText>

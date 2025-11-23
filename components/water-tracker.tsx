@@ -67,7 +67,7 @@ export function WaterTracker({ onSettingsPress, onHistoryPress }: WaterTrackerPr
   return (
     <ThemedView style={styles.container}>
       <View style={styles.header}>
-        <ThemedText type="subtitle" style={styles.title}>💧 Water Tracker</ThemedText>
+        <ThemedText type="subtitle" style={styles.title}>Water Tracker</ThemedText>
         <View style={styles.headerButtons}>
           
           {onSettingsPress && (
@@ -108,13 +108,13 @@ export function WaterTracker({ onSettingsPress, onHistoryPress }: WaterTrackerPr
           onPress={removeGlass}
           disabled={glassesCount === 0}
         >
-          <ThemedText style={[styles.buttonText, glassesCount === 0 && styles.disabledText]}>
-            ➖
+          <ThemedText style={[styles.removebuttonText, glassesCount === 0 && styles.disabledText]}>
+            −
           </ThemedText>
         </Pressable>
 
         <Pressable style={[styles.button, styles.addButton]} onPress={addGlass}>
-          <ThemedText style={styles.buttonText}>➕</ThemedText>
+          <ThemedText style={styles.addbuttonText}>+</ThemedText>
         </Pressable>
       </View>
     </ThemedView>
@@ -126,7 +126,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 16,
     padding: 16,
-    marginHorizontal: 20,
     marginBottom: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -215,15 +214,22 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   addButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#134ee2ff',
   },
   removeButton: {
-    backgroundColor: '#FF6B6B',
+    backgroundColor: '#ffffffff',
   },
-  buttonText: {
-    fontSize: 24,
+  addbuttonText: {
+    fontSize: 28,
     color: '#FFFFFF',
     fontWeight: 'bold',
+    lineHeight: 32,
+  },
+    removebuttonText: {
+    fontSize: 28,
+    color: '#000000ff',
+    fontWeight: 'bold',
+    lineHeight: 32,
   },
   disabledText: {
     opacity: 0.5,

@@ -111,16 +111,8 @@ export default function TipsScreen() {
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.headerContainer}>
-          <LinearGradient
-            colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
-            style={styles.glassCard}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-          >
-            <View style={styles.titleRow}>
-              <View style={styles.titleIconBadge}>
-                <ThemedText style={styles.titleIcon}>💡</ThemedText>
-              </View>
+           <View style={styles.titleRow}>
+             
               <View>
                 <ThemedText type="title" style={styles.title}>Wellness Tips</ThemedText>
                 <ThemedText style={styles.subtitle}>
@@ -128,7 +120,7 @@ export default function TipsScreen() {
                 </ThemedText>
               </View>
             </View>
-          </LinearGradient>
+        
         </View>
 
         {/* Tips List */}

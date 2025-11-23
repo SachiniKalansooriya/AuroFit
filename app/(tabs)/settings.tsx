@@ -1,13 +1,16 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import React, { useEffect, useState } from 'react';
-import { Appearance, Image, ScrollView, StyleSheet, Switch, View } from 'react-native';
+import { Appearance, Image, ScrollView, StyleSheet, Switch, View, Pressable, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../src/contexts/AuthContext';
 
 export default function SettingsScreen() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [isDarkMode, setIsDarkMode] = useState(Appearance.getColorScheme() === 'dark');
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [autoBackup, setAutoBackup] = useState(false);
 
   useEffect(() => {
     const subscription = Appearance.addChangeListener(({ colorScheme }) => {
@@ -22,6 +25,11 @@ export default function SettingsScreen() {
     setIsDarkMode(!isDarkMode);
   };
 
+  const handleLogout = () => {
+    // Add confirmation dialog here if needed
+    logout?.();
+  };
+
   return (
     <LinearGradient
       colors={['#FFFFFF', '#A1CEDC']}
@@ -29,41 +37,106 @@ export default function SettingsScreen() {
       start={{ x: 0, y: 0 }}
       end={{ x: 0, y: 1 }}
     >
-      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-        <ThemedText type="title" style={styles.title}>Settings</ThemedText>
+      <ScrollView 
+        style={styles.container} 
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Header */}
+        <View style={styles.headerContainer}>
+          <LinearGradient
+            colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
+            style={styles.glassCard}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <View style={styles.titleRow}>
+              
+              <ThemedText type="title" style={styles.title}>Settings</ThemedText>
+            </View>
+          </LinearGradient>
+        </View>
 
         {/* Profile Section */}
-        <ThemedView style={styles.section}>
-          <ThemedText type="subtitle" style={styles.sectionTitle}>Profile</ThemedText>
-          <View style={styles.profileContainer}>
-            <Image
-              source={require('../../assets/images/user.jpg')}
-              style={styles.profileImage}
-            />
-            <View style={styles.profileInfo}>
-              <ThemedText style={styles.username}>{user?.name || 'User'}</ThemedText>
-              <ThemedText style={styles.email}>{user?.email || 'user@example.com'}</ThemedText>
+        <View style={styles.sectionContainer}>
+          <LinearGradient
+            colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
+            style={styles.glassCard}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <View style={styles.sectionHeader}>
+             
+              <ThemedText type="subtitle" style={styles.sectionTitle}>Profile</ThemedText>
             </View>
-          </View>
-        </ThemedView>
 
-        {/* Preferences Section */}
-        <ThemedView style={styles.section}>
-          <ThemedText type="subtitle" style={styles.sectionTitle}>Preferences</ThemedText>
-          <View style={styles.preferenceItem}>
-            <ThemedText style={styles.preferenceLabel}>Dark Mode</ThemedText>
-            <Switch
-              value={isDarkMode}
-              onValueChange={toggleDarkMode}
-              trackColor={{ false: '#767577', true: '#81b0ff' }}
-              thumbColor={isDarkMode ? '#f5dd4b' : '#f4f3f4'}
-            />
-          </View>
-        </ThemedView>
+            <View style={styles.profileContainer}>
+              <View style={styles.profileImageContainer}>
+                <Image
+                  source={require('../../assets/images/user.jpg')}
+                  style={styles.profileImage}
+                />
+                <View style={styles.profileBadge}>
+                  <ThemedText style={styles.profileBadgeText}>✓</ThemedText>
+                </View>
+              </View>
+              <View style={styles.profileInfo}>
+                <ThemedText style={styles.username}>{user?.name || 'User'}</ThemedText>
+                <ThemedText style={styles.email}>{user?.email || 'user@example.com'}</ThemedText>
+                <Pressable style={styles.editButton}>
+                  <ThemedText style={styles.editButtonText}>Edit Profile</ThemedText>
+                </Pressable>
+              </View>
+            </View>
+          </LinearGradient>
+        </View>
 
-        <ThemedText style={styles.description}>
-          More settings will be added here.
-        </ThemedText>
+        {/* Appearance Section */}
+        <View style={styles.sectionContainer}>
+          <LinearGradient
+            colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
+            style={styles.glassCard}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <View style={styles.sectionHeader}>
+             
+              <ThemedText type="subtitle" style={styles.sectionTitle}>Appearance</ThemedText>
+            </View>
+
+            <View style={styles.preferenceItem}>
+              <View style={styles.preferenceLeft}>
+              
+                <View>
+                  <ThemedText style={styles.preferenceLabel}>Dark Mode</ThemedText>
+                  <ThemedText style={styles.preferenceDescription}>
+                    Use dark theme for the app
+                  </ThemedText>
+                </View>
+              </View>
+              <Switch
+                value={isDarkMode}
+                onValueChange={toggleDarkMode}
+                trackColor={{ false: '#D1D1D6', true: '#34C759' }}
+                thumbColor='#FFFFFF'
+                ios_backgroundColor="#D1D1D6"
+              />
+            </View>
+          </LinearGradient>
+        </View>
+
+
+        {/* Logout Button */}
+        <Pressable onPress={handleLogout} style={styles.logoutButtonContainer}>
+          <LinearGradient
+            colors={['rgba(255, 59, 48, 0.15)', 'rgba(255, 59, 48, 0.08)']}
+            style={styles.logoutButton}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <ThemedText style={styles.logoutText}>Log Out</ThemedText>
+          </LinearGradient>
+        </Pressable>
       </ScrollView>
     </LinearGradient>
   );
@@ -77,54 +150,210 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
+    padding: 16,
+    paddingBottom: 40,
+  },
+  glassCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    borderRadius: 20,
     padding: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 12,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
+  },
+  headerContainer: {
+    marginBottom: 20,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  titleIconBadge: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: 'rgba(0, 122, 255, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 122, 255, 0.3)',
+  },
+  titleIcon: {
+    fontSize: 24,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
+    color: '#1a1a1a',
+  },
+  sectionContainer: {
     marginBottom: 16,
   },
-  section: {
-    marginBottom: 24,
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  sectionIconBadge: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(0, 122, 255, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 122, 255, 0.2)',
+  },
+  sectionIcon: {
+    fontSize: 18,
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 12,
+    fontWeight: 'bold',
+    color: '#1a1a1a',
   },
   profileContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
+  profileImageContainer: {
+    position: 'relative',
+    marginRight: 16,
+  },
   profileImage: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    marginRight: 16,
+    borderWidth: 3,
+    borderColor: '#007AFF',
+  },
+  profileBadge: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#34C759',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+  },
+  profileBadgeText: {
+    fontSize: 12,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
   },
   profileInfo: {
     flex: 1,
   },
   username: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
+    color: '#1a1a1a',
     marginBottom: 4,
   },
   email: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#666',
+    marginBottom: 8,
+  },
+  editButton: {
+    backgroundColor: 'rgba(0, 122, 255, 0.1)',
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    borderRadius: 12,
+    alignSelf: 'flex-start',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 122, 255, 0.3)',
+  },
+  editButtonText: {
+    color: '#007AFF',
+    fontSize: 13,
+    fontWeight: '600',
   },
   preferenceItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  noBorder: {
+    borderBottomWidth: 0,
+  },
+  preferenceLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  preferenceIcon: {
+    fontSize: 24,
+    marginRight: 12,
   },
   preferenceLabel: {
     fontSize: 16,
+    fontWeight: '600',
+    color: '#1a1a1a',
+    marginBottom: 2,
   },
-  description: {
+  preferenceDescription: {
+    fontSize: 13,
+    color: '#666',
+  },
+  arrow: {
+    fontSize: 24,
+    color: '#C7C7CC',
+    fontWeight: '300',
+  },
+  versionText: {
+    fontSize: 14,
+    color: '#666',
+    fontWeight: '500',
+  },
+  logoutButtonContainer: {
+    marginTop: 8,
+    marginBottom: 20,
+  },
+  logoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 59, 48, 0.3)',
+  },
+  logoutIcon: {
+    fontSize: 20,
+    marginRight: 8,
+  },
+  logoutText: {
     fontSize: 16,
-    lineHeight: 24,
+    fontWeight: 'bold',
+    color: '#FF3B30',
+  },
+  footer: {
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  footerText: {
+    fontSize: 13,
+    color: '#999',
+    fontStyle: 'italic',
   },
 });

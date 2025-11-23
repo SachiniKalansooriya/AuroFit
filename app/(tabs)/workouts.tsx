@@ -140,22 +140,14 @@ export default function WorkoutsScreen() {
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.headerContainer}>
-          <LinearGradient
-            colors={['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
-            style={styles.glassCard}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-          >
+         
             <View style={styles.titleRow}>
-              <View style={styles.titleIconBadge}>
-                <ThemedText style={styles.titleIcon}>🏋️</ThemedText>
-              </View>
               <View>
                 <ThemedText type="title" style={styles.title}>My Workouts</ThemedText>
                 <ThemedText style={styles.subtitle}>{workouts.length} total exercises logged</ThemedText>
               </View>
             </View>
-          </LinearGradient>
+          
         </View>
 
         {/* Weekly Summary */}
@@ -168,28 +160,15 @@ export default function WorkoutsScreen() {
               end={{ x: 1, y: 1 }}
             >
               <View style={styles.summaryHeader}>
-                <View style={styles.statsIconBadge}>
-                  <ThemedText style={styles.statsIcon}>📊</ThemedText>
-                </View>
+               
                 <ThemedText style={styles.summaryTitle}>This Week's Stats</ThemedText>
               </View>
 
-              {/* Stats Cards */}
-              <View style={styles.statsRow}>
-                <View style={styles.statCard}>
-                  <ThemedText style={styles.statValue}>{weeklyWorkouts}</ThemedText>
-                  <ThemedText style={styles.statLabel}>Workouts</ThemedText>
-                </View>
-                <View style={styles.statCard}>
-                  <ThemedText style={styles.statValue}>{Object.keys(exerciseSummary).length}</ThemedText>
-                  <ThemedText style={styles.statLabel}>Exercises</ThemedText>
-                </View>
-              </View>
-
+              
               {/* Duration Summary */}
               {Object.keys(exerciseSummary).length > 0 && (
                 <View style={styles.durationList}>
-                  <ThemedText style={styles.durationTitle}>⏱️ Duration Breakdown</ThemedText>
+                  <ThemedText style={styles.durationTitle}> Duration Breakdown</ThemedText>
                   {Object.entries(exerciseSummary).map(([name, totalMin]) => {
                     const hours = Math.floor(totalMin / 60);
                     const mins = totalMin % 60;
@@ -216,7 +195,7 @@ export default function WorkoutsScreen() {
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
-              <ThemedText style={styles.emptyIcon}>🏃</ThemedText>
+            
               <ThemedText style={styles.empty}>No workouts logged yet.</ThemedText>
               <ThemedText style={styles.emptySubtext}>Start your fitness journey today!</ThemedText>
             </LinearGradient>
