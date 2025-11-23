@@ -6,6 +6,24 @@ import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 import { IconSymbol } from './ui/icon-symbol';
 
+// Utility function for status colors
+const getStatusColor = (status: string): string => {
+  switch (status.toLowerCase()) {
+    case 'beginner':
+      return '#4CAF50'; // Green
+    case 'intermediate':
+      return '#FF9800'; // Orange
+    case 'advanced':
+      return '#F44336'; // Red
+    case 'popular':
+      return '#2196F3'; // Blue
+    case 'new':
+      return '#9C27B0'; // Purple
+    default:
+      return '#607D8B'; // Blue Grey
+  }
+};
+
 interface WellnessCardProps {
   item: WellnessItem;
   onPress?: () => void;
