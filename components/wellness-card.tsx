@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, Pressable, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
 import { Colors } from '../constants/theme';
 import { WellnessItem } from '../src/types/wellness';
 import { ThemedText } from './themed-text';
@@ -32,8 +32,15 @@ export const WellnessCard: React.FC<WellnessCardProps> = ({ item, onPress, diffi
     }
   };
 
+  const colorScheme = useColorScheme();
+  const outlineStyle = {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: colorScheme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'
+  } as const;
+
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity style={[styles.card, outlineStyle]} onPress={onPress} activeOpacity={0.7}>
       <ThemedView style={styles.cardContent}>
         <Pressable
           onPress={(e: any) => {
@@ -101,6 +108,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
     overflow: 'hidden',
+    
   },
   cardContent: {
     padding: 16,
