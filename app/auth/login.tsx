@@ -41,7 +41,9 @@ export default function LoginScreen() {
       start={{ x: 0, y: 0 }} // Top
       end={{ x: 0, y: 1 }} // Bottom
     >
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Welcome to AuroFit</Text>
+      <Text style={styles.subtitle}>Your personal fitness companion</Text>
+      <Text style={styles.loginTitle}>Login</Text>
       
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Username:</Text>
@@ -100,6 +102,20 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 30,
+    color: '#0e3b6bff',
+  },
+  subtitle: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 20,
+    color: Colors.light.text,
+    opacity: 0.8,
+  },
+  loginTitle: {
+    fontSize: 20,
+    fontWeight: '600',
     textAlign: 'center',
     marginBottom: 30,
     color: Colors.light.text,
