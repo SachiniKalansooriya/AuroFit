@@ -48,19 +48,12 @@ export default function SettingsScreen() {
       >
         {/* Header */}
         <View style={styles.headerContainer}>
-          <LinearGradient
-            colors={colorScheme === 'dark' 
-              ? ['rgba(30, 30, 30, 0.95)', 'rgba(20, 20, 20, 0.85)'] 
-              : ['rgba(255, 255, 255, 0.95)', 'rgba(255, 255, 255, 0.85)']}
-            style={styles.glassCard}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-          >
+        
             <View style={styles.titleRow}>
               
               <ThemedText type="title" style={styles.title}>Settings</ThemedText>
             </View>
-          </LinearGradient>
+   
         </View>
 
         {/* Profile Section */}
@@ -125,7 +118,7 @@ export default function SettingsScreen() {
               <Switch
                 value={isDarkMode}
                 onValueChange={toggleDarkMode}
-                trackColor={{ false: '#D1D1D6', true: '#34C759' }}
+                trackColor={{ false: '#D1D1D6', true: '#0e3b6bff' }}
                 thumbColor='#FFFFFF'
                 ios_backgroundColor="#D1D1D6"
               />

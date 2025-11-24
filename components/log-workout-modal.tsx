@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     padding: 12,
     marginLeft: 10,
     borderRadius: 8,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#0e3b6bff',
     alignItems: 'center',
   },
   submitText: {
