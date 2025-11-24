@@ -63,10 +63,9 @@ app/
 ├── (tabs)/             # Tab group for bottom navigation
 │   ├── _layout.tsx     # Tab navigation layout
 │   ├── index.tsx       # Home screen (/)
-│   ├── explore.tsx     # Exercise categories (/explore)
 │   ├── favorites.tsx   # Favorite exercises (/favorites)
 │   ├── workouts.tsx    # Workout history (/workouts)
-│   └── tips.tsx        # Wellness tips (/tips)
+│   └── settings.tsx    # account preferences (/settings)
 ├── constants/
 │   └── theme.ts        # App theming constants
 ├── components/
