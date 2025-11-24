@@ -1,9 +1,9 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, Image, Linking, Pressable, ScrollView, StyleSheet, View, useColorScheme, ColorSchemeName } from 'react-native';
+import { Alert, ColorSchemeName, Image, Pressable, ScrollView, StyleSheet, View, useColorScheme } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import getExerciseImage from '../../src/config/exercise-images';
 import FavoritesService from '../../src/services/favoritesService';
@@ -50,7 +50,12 @@ export default function ExerciseDetailScreen() {
   }, [name]);
 
   return (
-    <ThemedView style={styles.container}>
+    <LinearGradient
+      colors={colorScheme === 'dark' ? ['#000000', '#1a1a1a'] : ['#FFFFFF', '#A1CEDC']}
+      style={styles.gradient}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+    >
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.titleRow}>
           <ThemedText type="title" style={styles.title}>
@@ -110,11 +115,14 @@ export default function ExerciseDetailScreen() {
           ← Back
         </ThemedText>
       </ScrollView>
-    </ThemedView>
+    </LinearGradient>
   );
 }
 
 const getStyles = (colorScheme: ColorSchemeName) => StyleSheet.create({
+  gradient: {
+    flex: 1,
+  },
   container: {
     flex: 1,
   },
