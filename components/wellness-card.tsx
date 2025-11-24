@@ -10,17 +10,17 @@ import { IconSymbol } from './ui/icon-symbol';
 const getStatusColor = (status: string): string => {
   switch (status.toLowerCase()) {
     case 'beginner':
-      return '#4CAF50'; // Green
+      return '#566391ff'; 
     case 'intermediate':
-      return '#FF9800'; // Orange
+      return '#09137aff';
     case 'advanced':
-      return '#F44336'; // Red
+      return '#365496ff'; 
     case 'popular':
-      return '#2196F3'; // Blue
+      return '#2196F3'; 
     case 'new':
-      return '#9C27B0'; // Purple
+      return '#09137aff'; 
     default:
-      return '#607D8B'; // Blue Grey
+      return '#05608eff'; 
   }
 };
 

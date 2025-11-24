@@ -48,6 +48,7 @@ A comprehensive fitness and wellness tracking app built with React Native and Ex
 - **TypeScript** - Type-safe JavaScript
 - **expo-router** - File-based routing system (built on React Navigation)
 - **React Navigation** - Underlying navigation library used by expo-router
+- **Redux Toolkit** - Modern state management with simplified Redux
 - **AsyncStorage** - Local data persistence
 - **expo-linear-gradient** - Gradient backgrounds
 - **API-Ninjas** - Exercise data API (https://api-ninjas.com/api/exercises)
@@ -153,6 +154,12 @@ app/
 - **LogWorkoutModal** - Modal for logging workout details
 - **WaterTracker** - Water intake monitoring component
 - **ThemedText/ThemedView** - Theme-aware text and view components
+
+### State Management
+- **Redux Toolkit** - Modern Redux with simplified setup and less boilerplate
+- **Water tracking state** - Complex water intake data with weekly history and statistics
+- **Async operations** - Thunks for API calls and data persistence
+- **TypeScript integration** - Strongly typed actions, reducers, and selectors
 
 ### Navigation
 - File-based routing with expo-router (Next.js-style routing)

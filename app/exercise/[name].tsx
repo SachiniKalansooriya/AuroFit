@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
@@ -13,6 +14,7 @@ import { ExerciseItem } from '../../src/types/wellness';
 export default function ExerciseDetailScreen() {
   const params = useLocalSearchParams() as { name?: string };
   const router = useRouter();
+  const navigation = useNavigation();
   const colorScheme = useColorScheme();
   const styles = getStyles(colorScheme);
   const name = params?.name;
@@ -31,6 +33,8 @@ export default function ExerciseDetailScreen() {
         const details = await WellnessService.getExerciseDetails(decodeURIComponent(name));
         if (mounted) setExercise(details);
         if (mounted && details) {
+          // Set the navigation title to the exercise name
+          navigation.setOptions({ title: details.name });
           try {
             const fav = await FavoritesService.isFavorite(details.id) || await FavoritesService.isFavorite(details.name);
             setIsFav(!!fav);
